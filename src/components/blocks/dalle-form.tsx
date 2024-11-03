@@ -50,6 +50,11 @@ export function DalleForm() {
 
   const generateImage = async () => {
     setIsLoading(true);
+    if (!rememberApiKey) {
+      localStorage.removeItem("openai-api-key");
+    } else {
+      localStorage.setItem("openai-api-key", apiKey);
+    }
     try {
       const response = await fetch(
         "https://api.openai.com/v1/images/generations",
@@ -186,11 +191,6 @@ export function DalleForm() {
                 checked={rememberApiKey}
                 onCheckedChange={(checked) => {
                   setRememberApiKey(checked);
-                  if (!checked) {
-                    localStorage.removeItem("openai-api-key");
-                  } else {
-                    localStorage.setItem("openai-api-key", apiKey);
-                  }
                 }}
               />
               <Label
