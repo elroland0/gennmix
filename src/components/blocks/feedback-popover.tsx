@@ -7,21 +7,26 @@ import {
 } from "@/components/ui/popover";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
-import { sendFeedback } from "@/actions/send-feedback";
-import { useFormStatus } from "react-dom";
 import { Button } from "../ui/button";
 import { toast } from "@/hooks/use-toast";
 import { Textarea } from "../ui/textarea";
 
 export function FeedbackPopover() {
-  const { pending } = useFormStatus();
   const [open, setOpen] = useState(false);
   const [message, setMessage] = useState("");
+  const [pending, setPending] = useState(false);
   const pathname = usePathname();
 
   const handleSubmit = async (formData: FormData) => {
     try {
-      await sendFeedback(formData);
+      setPending(true);
+      const res = await fetch("/feedback", {
+        method: "POST",
+        body: formData,
+      });
+      if (!res.ok) {
+        throw new Error("Failed to submit feedback");
+      }
       setOpen(false);
       setMessage("");
       toast({
@@ -33,6 +38,8 @@ export function FeedbackPopover() {
         title: "Something went wrong",
         description: "Please try again later",
       });
+    } finally {
+      setPending(false);
     }
   };
 

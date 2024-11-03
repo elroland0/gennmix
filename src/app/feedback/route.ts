@@ -1,12 +1,11 @@
-"use server";
-
 import { Client } from "@notionhq/client";
 
-export async function sendFeedback(formData: FormData) {
+export async function POST(request: Request) {
+  const formData = await request.formData();
   const path = formData.get("path");
   const message = formData.get("message");
 
-  if (!path || !message) {
+  if (typeof path !== "string" || typeof message !== "string") {
     return;
   }
 
@@ -15,11 +14,11 @@ export async function sendFeedback(formData: FormData) {
     parent: { database_id: process.env.NOTION_FEEDBACK_DB_ID! },
     properties: {
       path: {
-        title: [{ text: { content: path.toString() } }],
+        title: [{ text: { content: path } }],
       },
     },
-    children: [
-      { paragraph: { rich_text: [{ text: { content: message.toString() } }] } },
-    ],
+    children: [{ paragraph: { rich_text: [{ text: { content: message } }] } }],
   });
+
+  return new Response(null, { status: 200 });
 }
