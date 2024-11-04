@@ -7,11 +7,12 @@ import { ImageList } from "@/components/blocks/image-list";
 import { FeedbackPopover } from "@/components/blocks/feedback-popover";
 import { Suspense } from "react";
 import { TooltipProvider } from "@/components/ui/tooltip";
+import { Header } from "@/components/common/header";
 
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "AI Image Generator",
+  title: "Gennmix",
   description: "Generate images using various AI services with your API keys",
 };
 
@@ -25,19 +26,19 @@ export default function RootLayout({
       <body className={inter.className}>
         <TooltipProvider>
           <ImageProvider>
-            <main className="flex flex-col h-screen">
-              <div className="flex-1 flex justify-center overflow-y-auto">
-                {children}
+            <div className="flex flex-col h-screen">
+              <div className="flex-1 overflow-y-auto flex flex-col">
+                <Header />
+                <main className="flex-1 flex flex-col items-center px-4">
+                  {children}
+                </main>
               </div>
               <Suspense fallback={null}>
                 <ImageList />
               </Suspense>
-            </main>
+            </div>
           </ImageProvider>
         </TooltipProvider>
-        <div className="fixed top-4 right-4">
-          <FeedbackPopover />
-        </div>
         <Toaster />
       </body>
     </html>
