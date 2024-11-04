@@ -6,6 +6,7 @@ import { ImageProvider } from "@/contexts/image-context";
 import { ImageList } from "@/components/blocks/image-list";
 import { FeedbackPopover } from "@/components/blocks/feedback-popover";
 import { Suspense } from "react";
+import { TooltipProvider } from "@/components/ui/tooltip";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -22,16 +23,18 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={inter.className}>
-        <ImageProvider>
-          <main className="flex flex-col h-screen">
-            <div className="flex-1 flex justify-center overflow-y-auto">
-              {children}
-            </div>
-            <Suspense fallback={null}>
-              <ImageList />
-            </Suspense>
-          </main>
-        </ImageProvider>
+        <TooltipProvider>
+          <ImageProvider>
+            <main className="flex flex-col h-screen">
+              <div className="flex-1 flex justify-center overflow-y-auto">
+                {children}
+              </div>
+              <Suspense fallback={null}>
+                <ImageList />
+              </Suspense>
+            </main>
+          </ImageProvider>
+        </TooltipProvider>
         <div className="fixed top-4 right-4">
           <FeedbackPopover />
         </div>

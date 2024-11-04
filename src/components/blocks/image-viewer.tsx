@@ -2,7 +2,7 @@
 
 import { toast } from "@/hooks/use-toast";
 import { Button } from "../ui/button";
-import { CopyIcon, DownloadIcon } from "@radix-ui/react-icons";
+import { CopyIcon, DownloadIcon, Pencil1Icon } from "@radix-ui/react-icons";
 import Image from "next/image";
 import { useState } from "react";
 import {
@@ -13,6 +13,8 @@ import {
   DialogTitle,
 } from "../ui/dialog";
 import { useRouter } from "next/navigation";
+import { Badge } from "../ui/badge";
+import { Tooltip, TooltipContent, TooltipTrigger } from "../ui/tooltip";
 
 export function ImageViewer({
   image,
@@ -21,6 +23,10 @@ export function ImageViewer({
     id: string;
     url: string;
     expiresAt: number;
+    ai?: "dall-e" | "recraft";
+    model?: string;
+    prompt?: string;
+    size?: string;
   };
 }) {
   const [isDownloading, setIsDownloading] = useState(false);
@@ -100,10 +106,31 @@ export function ImageViewer({
     >
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>Generated Image</DialogTitle>
+          <DialogTitle className="flex items-center gap-2">
+            {!image.ai || image.ai === "dall-e"
+              ? "DALL-E Image"
+              : "Recraft Image"}
+            {image.model && <Badge>{image.model}</Badge>}
+            {image.size && <Badge variant="outline">{image.size}</Badge>}
+            {image.prompt && (
+              // defaultOpen={false} doesn't work here why?
+              <Tooltip defaultOpen={false}>
+                <TooltipTrigger>
+                  <Badge variant="outline" className="flex items-center">
+                    <Pencil1Icon className="w-3 h-3 mr-1 mt-[2px]" />
+                    prompt
+                  </Badge>
+                </TooltipTrigger>
+                <TooltipContent>
+                  <p>{image.prompt}</p>
+                </TooltipContent>
+              </Tooltip>
+            )}
+          </DialogTitle>
           <DialogDescription>
-            This image will expire in 1 hour. Please download it to keep a
-            permanent copy.
+            {!Number.isFinite(image.expiresAt)
+              ? "This image will expire in 1 hour. Please download it to keep a permanent copy."
+              : "This image can be lost if the browser cache is cleared. Please download it to keep a permanent copy."}
           </DialogDescription>
         </DialogHeader>
         <div>
