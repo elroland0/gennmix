@@ -5,10 +5,10 @@ import { createContext, useContext, useEffect, useState } from "react";
 type ImageContextType = {
   images: {
     id: string;
-    ai?: "dall-e" | "recraft";
-    model?: string;
-    prompt?: string;
-    size?: string;
+    ai: "dall-e" | "recraft";
+    model: string;
+    prompt: string;
+    size: string;
     url: string;
     expiresAt: number;
   }[];
@@ -27,29 +27,35 @@ const ImageContext = createContext<ImageContextType | undefined>(undefined);
 
 export function ImageProvider({ children }: { children: React.ReactNode }) {
   const [images, setImages] = useState<
-    { id: string; url: string; expiresAt: number }[]
+    {
+      id: string;
+      ai: "dall-e" | "recraft";
+      model: string;
+      prompt: string;
+      size: string;
+      url: string;
+      expiresAt: number;
+    }[]
   >([]);
 
   useEffect(() => {
     const storedImages = localStorage.getItem("images");
     if (storedImages) {
       const parsedImages = JSON.parse(storedImages) as {
-        id?: string;
+        id: string;
+        ai: "dall-e" | "recraft";
+        model: string;
+        prompt: string;
+        size: string;
         url: string;
         expiresAt: number;
       }[];
       const filteredImages = parsedImages.filter(
         (image) => image.expiresAt > Date.now()
       );
-      const imagesWithId = filteredImages.map((image) => {
-        if (!image.id) {
-          return { ...image, id: crypto.randomUUID() };
-        }
-        return image;
-      }) as { id: string; url: string; expiresAt: number }[];
 
-      setImages(imagesWithId);
-      localStorage.setItem("images", JSON.stringify(imagesWithId));
+      setImages(filteredImages);
+      localStorage.setItem("images", JSON.stringify(filteredImages));
     } else {
       setImages([]);
     }
