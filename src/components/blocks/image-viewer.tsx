@@ -15,6 +15,7 @@ import {
 import { useRouter } from "next/navigation";
 import { Badge } from "../ui/badge";
 import { Tooltip, TooltipContent, TooltipTrigger } from "../ui/tooltip";
+import mime from "mime";
 
 export function ImageViewer({
   image,
@@ -36,23 +37,31 @@ export function ImageViewer({
   const handleDownload = async () => {
     setIsDownloading(true);
     try {
-      const res = await fetch(
-        `/image/download?url=${encodeURIComponent(image.url)}`,
-        {
-          method: "POST",
-        }
-      );
-      const blob = await res.blob();
+      let blob: Blob;
+      if (!image.ai || image.ai === "dall-e") {
+        const res = await fetch(
+          `/image/download?url=${encodeURIComponent(image.url)}`,
+          {
+            method: "POST",
+          }
+        );
+        blob = await res.blob();
+      } else if (image.ai === "recraft") {
+        const res = await fetch(image.url);
+        blob = await res.blob();
+      } else {
+        throw new Error("Invalid AI type");
+      }
+
       const downloadUrl = URL.createObjectURL(blob);
       const a = document.createElement("a");
       a.href = downloadUrl;
-      const format = res.headers.get("Content-Type")?.split("/")[1];
+      const format = mime.getExtension(blob.type);
       a.download = `generated-image.${format}`;
       document.body.appendChild(a);
       a.click();
       document.body.removeChild(a);
     } catch (error) {
-      console.error("Download failed:", error);
       toast({
         title: "Download failed",
         description: "Failed to download the image. Please try again.",
@@ -66,13 +75,22 @@ export function ImageViewer({
   const handleCopy = async () => {
     setIsCopying(true);
     try {
-      const response = await fetch(
-        `/image/download?url=${encodeURIComponent(image.url)}`,
-        {
-          method: "POST",
-        }
-      );
-      const blob = await response.blob();
+      let blob: Blob;
+      if (!image.ai || image.ai === "dall-e") {
+        const response = await fetch(
+          `/image/download?url=${encodeURIComponent(image.url)}`,
+          {
+            method: "POST",
+          }
+        );
+        blob = await response.blob();
+      } else if (image.ai === "recraft") {
+        const response = await fetch(image.url);
+        blob = await response.blob();
+      } else {
+        throw new Error("Invalid AI type");
+      }
+
       await navigator.clipboard.write([
         new ClipboardItem({
           [blob.type]: blob,
