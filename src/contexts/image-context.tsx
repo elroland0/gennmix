@@ -3,36 +3,49 @@
 import { createContext, useContext, useEffect, useState } from "react";
 
 type ImageContextType = {
-  images: { url: string; expiresAt: number }[];
-  addImage: (url: string, expiresAt: number) => void;
+  images: { id: string; url: string; expiresAt: number }[];
+  addImage: (url: string, expiresAt: number) => { id: string };
   clearImages: () => void;
 };
 
 const ImageContext = createContext<ImageContextType | undefined>(undefined);
 
 export function ImageProvider({ children }: { children: React.ReactNode }) {
-  const [images, setImages] = useState<{ url: string; expiresAt: number }[]>(
-    []
-  );
+  const [images, setImages] = useState<
+    { id: string; url: string; expiresAt: number }[]
+  >([]);
 
   useEffect(() => {
     const storedImages = localStorage.getItem("images");
     if (storedImages) {
-      const parsedImages = JSON.parse(storedImages);
+      const parsedImages = JSON.parse(storedImages) as {
+        id?: string;
+        url: string;
+        expiresAt: number;
+      }[];
       const filteredImages = parsedImages.filter(
-        (image: { expiresAt: number }) => image.expiresAt > Date.now()
+        (image) => image.expiresAt > Date.now()
       );
-      setImages(filteredImages);
-      localStorage.setItem("images", JSON.stringify(filteredImages));
+      const imagesWithId = filteredImages.map((image) => {
+        if (!image.id) {
+          return { ...image, id: crypto.randomUUID() };
+        }
+        return image;
+      }) as { id: string; url: string; expiresAt: number }[];
+
+      setImages(imagesWithId);
+      localStorage.setItem("images", JSON.stringify(imagesWithId));
     } else {
       setImages([]);
     }
   }, []);
 
   const addImage = (url: string, expiresAt: number) => {
-    const newImages = [{ url, expiresAt }, ...images];
-    setImages(newImages);
+    const id = crypto.randomUUID();
+    const newImages = [{ id, url, expiresAt }, ...images];
     localStorage.setItem("images", JSON.stringify(newImages));
+    setImages(newImages);
+    return { id };
   };
 
   const clearImages = () => {
