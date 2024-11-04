@@ -5,14 +5,27 @@ import { Button } from "../ui/button";
 import { CopyIcon, DownloadIcon } from "@radix-ui/react-icons";
 import Image from "next/image";
 import { useState } from "react";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+} from "../ui/dialog";
+import { useRouter } from "next/navigation";
 
 export function ImageViewer({
   image,
 }: {
-  image: { id: string; url: string; expiresAt: number };
+  image: {
+    id: string;
+    url: string;
+    expiresAt: number;
+  };
 }) {
   const [isDownloading, setIsDownloading] = useState(false);
   const [isCopying, setIsCopying] = useState(false);
+  const router = useRouter();
 
   const handleDownload = async () => {
     setIsDownloading(true);
@@ -77,30 +90,48 @@ export function ImageViewer({
   };
 
   return (
-    <div>
-      <div className="flex gap-2">
-        <Button
-          variant="outline"
-          onClick={handleDownload}
-          disabled={isDownloading}
-        >
-          <DownloadIcon className="w-4 h-4" />
-          Download
-        </Button>
-        <Button variant="outline" onClick={handleCopy} disabled={isCopying}>
-          <CopyIcon className="w-4 h-4" />
-          Copy
-        </Button>
-      </div>
-      <div className="flex justify-center p-10">
-        <Image
-          src={image.url}
-          alt="Generated Image"
-          width={256}
-          height={256}
-          unoptimized
-        />
-      </div>
-    </div>
+    <Dialog
+      open={true}
+      onOpenChange={(open) => {
+        if (!open) {
+          router.back();
+        }
+      }}
+    >
+      <DialogContent>
+        <DialogHeader>
+          <DialogTitle>Generated Image</DialogTitle>
+          <DialogDescription>
+            This image will expire in 1 hour. Please download it to keep a
+            permanent copy.
+          </DialogDescription>
+        </DialogHeader>
+        <div>
+          <div className="flex gap-2">
+            <Button
+              variant="outline"
+              onClick={handleDownload}
+              disabled={isDownloading}
+            >
+              <DownloadIcon className="w-4 h-4" />
+              Download
+            </Button>
+            <Button variant="outline" onClick={handleCopy} disabled={isCopying}>
+              <CopyIcon className="w-4 h-4" />
+              Copy
+            </Button>
+          </div>
+          <div className="flex justify-center p-10">
+            <Image
+              src={image.url}
+              alt="Generated Image"
+              width={256}
+              height={256}
+              unoptimized
+            />
+          </div>
+        </div>
+      </DialogContent>
+    </Dialog>
   );
 }

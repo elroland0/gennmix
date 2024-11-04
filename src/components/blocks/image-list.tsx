@@ -3,19 +3,11 @@
 import { useImages } from "@/contexts/image-context";
 import Image from "next/image";
 import Link from "next/link";
-import { useRouter, useSearchParams } from "next/navigation";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-} from "@/components/ui/dialog";
+import { useSearchParams } from "next/navigation";
 import { ImageViewer } from "@/components/blocks/image-viewer";
 
 export function ImageList() {
   const { images } = useImages();
-  const router = useRouter();
   const searchParams = useSearchParams();
   const imageId = searchParams.get("image");
 
@@ -42,29 +34,9 @@ export function ImageList() {
         </div>
       </div>
 
-      <Dialog
-        open={!!imageId}
-        onOpenChange={(open) => {
-          if (!open) {
-            router.back();
-          }
-        }}
-      >
-        <DialogContent>
-          <DialogHeader>
-            <DialogTitle>Generated Image</DialogTitle>
-            <DialogDescription>
-              This image will expire in 1 hour. Please download it to keep a
-              permanent copy.
-            </DialogDescription>
-          </DialogHeader>
-          {imageId ? (
-            <ImageViewer image={images.find(({ id }) => id === imageId)!} />
-          ) : (
-            <div>No image URL provided</div>
-          )}
-        </DialogContent>
-      </Dialog>
+      {imageId && (
+        <ImageViewer image={images.find(({ id }) => id === imageId)!} />
+      )}
     </>
   );
 }
