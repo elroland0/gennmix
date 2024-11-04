@@ -80,7 +80,14 @@ export function DalleForm() {
 
       const data = (await response.json()) as { data: { url: string }[] };
       const imageUrl = data.data[0].url;
-      const { id } = addImage(imageUrl, Date.now() + 1000 * 60 * 60);
+      const { id } = addImage(
+        "dall-e",
+        model,
+        prompt,
+        imageSize,
+        imageUrl,
+        Date.now() + 1000 * 60 * 60
+      );
       router.push(`?image=${id}`);
     } catch (err) {
       toast({

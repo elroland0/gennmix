@@ -3,8 +3,23 @@
 import { createContext, useContext, useEffect, useState } from "react";
 
 type ImageContextType = {
-  images: { id: string; url: string; expiresAt: number }[];
-  addImage: (url: string, expiresAt: number) => { id: string };
+  images: {
+    id: string;
+    ai?: "dall-e" | "recraft";
+    model?: string;
+    prompt?: string;
+    size?: string;
+    url: string;
+    expiresAt: number;
+  }[];
+  addImage: (
+    ai: "dall-e" | "recraft",
+    model: string,
+    prompt: string,
+    size: string,
+    url: string,
+    expiresAt: number
+  ) => { id: string };
   clearImages: () => void;
 };
 
@@ -40,9 +55,19 @@ export function ImageProvider({ children }: { children: React.ReactNode }) {
     }
   }, []);
 
-  const addImage = (url: string, expiresAt: number) => {
+  const addImage = (
+    ai: "dall-e" | "recraft",
+    model: string,
+    prompt: string,
+    size: string,
+    url: string,
+    expiresAt: number
+  ) => {
     const id = crypto.randomUUID();
-    const newImages = [{ id, url, expiresAt }, ...images];
+    const newImages = [
+      { id, ai, model, prompt, size, url, expiresAt },
+      ...images,
+    ];
     localStorage.setItem("images", JSON.stringify(newImages));
     setImages(newImages);
     return { id };
