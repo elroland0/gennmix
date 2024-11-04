@@ -215,15 +215,19 @@ export function RecraftGenerate() {
         <div className="space-y-2">
           <Label>Substyle</Label>
           <Select
-            defaultValue={style.substyle}
+            defaultValue={style.substyle || "none"}
             onValueChange={(value) =>
-              setStyle((prev) => ({ ...prev, substyle: value as Substyle }))
+              setStyle((prev) => ({
+                ...prev,
+                substyle: value === "none" ? undefined : (value as Substyle),
+              }))
             }
           >
             <SelectTrigger>
               <SelectValue />
             </SelectTrigger>
             <SelectContent>
+              <SelectItem value="none">none</SelectItem>
               {substyles.map((substyle) => (
                 <SelectItem key={substyle} value={substyle}>
                   {substyle}
