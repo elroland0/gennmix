@@ -6,7 +6,11 @@ import { CopyIcon, DownloadIcon } from "@radix-ui/react-icons";
 import Image from "next/image";
 import { useState } from "react";
 
-export function ImageViewer({ imageUrl }: { imageUrl: string }) {
+export function ImageViewer({
+  image,
+}: {
+  image: { id: string; url: string; expiresAt: number };
+}) {
   const [isDownloading, setIsDownloading] = useState(false);
   const [isCopying, setIsCopying] = useState(false);
 
@@ -14,7 +18,7 @@ export function ImageViewer({ imageUrl }: { imageUrl: string }) {
     setIsDownloading(true);
     try {
       const res = await fetch(
-        `/image/download?url=${encodeURIComponent(imageUrl)}`,
+        `/image/download?url=${encodeURIComponent(image.url)}`,
         {
           method: "POST",
         }
@@ -44,7 +48,7 @@ export function ImageViewer({ imageUrl }: { imageUrl: string }) {
     setIsCopying(true);
     try {
       const response = await fetch(
-        `/image/download?url=${encodeURIComponent(imageUrl)}`,
+        `/image/download?url=${encodeURIComponent(image.url)}`,
         {
           method: "POST",
         }
@@ -90,7 +94,7 @@ export function ImageViewer({ imageUrl }: { imageUrl: string }) {
       </div>
       <div className="flex justify-center p-10">
         <Image
-          src={imageUrl}
+          src={image.url}
           alt="Generated Image"
           width={256}
           height={256}

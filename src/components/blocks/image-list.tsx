@@ -17,7 +17,7 @@ export function ImageList() {
   const { images } = useImages();
   const router = useRouter();
   const searchParams = useSearchParams();
-  const imageUrl = searchParams.get("image");
+  const imageId = searchParams.get("image");
 
   if (images.length === 0) {
     return null;
@@ -27,8 +27,8 @@ export function ImageList() {
     <>
       <div className="overflow-x-auto h-32 p-4 shadow-inner">
         <div className="space-x-4 flex items-center min-w-max">
-          {images.map(({ url }, index) => (
-            <Link key={url} href={`?image=${encodeURIComponent(url)}`}>
+          {images.map(({ id, url }, index) => (
+            <Link key={id} href={`?image=${id}`}>
               <Image
                 src={url}
                 alt={`Generated image ${index + 1}`}
@@ -43,7 +43,7 @@ export function ImageList() {
       </div>
 
       <Dialog
-        open={!!imageUrl}
+        open={!!imageId}
         onOpenChange={(open) => {
           if (!open) {
             router.back();
@@ -58,8 +58,8 @@ export function ImageList() {
               permanent copy.
             </DialogDescription>
           </DialogHeader>
-          {imageUrl ? (
-            <ImageViewer imageUrl={imageUrl} />
+          {imageId ? (
+            <ImageViewer image={images.find(({ id }) => id === imageId)!} />
           ) : (
             <div>No image URL provided</div>
           )}
