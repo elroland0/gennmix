@@ -4,7 +4,6 @@ import "./globals.css";
 import { Toaster } from "@/components/ui/toaster";
 import { ImageProvider } from "@/contexts/image-context";
 import { ImageList } from "@/components/blocks/image-list";
-import { FeedbackPopover } from "@/components/blocks/feedback-popover";
 import { Suspense } from "react";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { Header } from "@/components/common/header";
@@ -14,6 +13,9 @@ const inter = Inter({ subsets: ["latin"] });
 export const metadata: Metadata = {
   title: "Gennmix",
   description: "Generate images using various AI services with your API keys",
+  icons: {
+    icon: "/favicon.svg",
+  },
 };
 
 export default function RootLayout({
