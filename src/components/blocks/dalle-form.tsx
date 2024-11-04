@@ -81,7 +81,7 @@ export function DalleForm() {
       const data = (await response.json()) as { data: { url: string }[] };
       const imageUrl = data.data[0].url;
       addImage(imageUrl, Date.now() + 1000 * 60 * 60);
-      router.push(`/image?url=${encodeURIComponent(imageUrl)}`);
+      router.push(`?image=${encodeURIComponent(imageUrl)}`);
     } catch (err) {
       toast({
         title: "Error",
@@ -102,7 +102,7 @@ export function DalleForm() {
   }, []);
 
   return (
-    <Card className="border-none shadow-none">
+    <Card className="w-full border-none shadow-none">
       <CardHeader className="px-0">
         <CardTitle>DALL-E Image Generator</CardTitle>
       </CardHeader>

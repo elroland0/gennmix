@@ -3,30 +3,68 @@
 import { useImages } from "@/contexts/image-context";
 import Image from "next/image";
 import Link from "next/link";
+import { useRouter, useSearchParams } from "next/navigation";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
+import { ImageViewer } from "@/components/blocks/image-viewer";
 
 export function ImageList() {
   const { images } = useImages();
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const imageUrl = searchParams.get("image");
 
   if (images.length === 0) {
     return null;
   }
 
   return (
-    <div className="overflow-x-auto h-32 p-4 shadow-inner">
-      <div className="space-x-4 flex items-center min-w-max">
-        {images.map(({ url }, index) => (
-          <Link key={url} href={`/image?url=${encodeURIComponent(url)}`}>
-            <Image
-              src={url}
-              alt={`Generated image ${index + 1}`}
-              width={96}
-              height={96}
-              className="object-cover rounded-lg"
-              unoptimized
-            />
-          </Link>
-        ))}
+    <>
+      <div className="overflow-x-auto h-32 p-4 shadow-inner">
+        <div className="space-x-4 flex items-center min-w-max">
+          {images.map(({ url }, index) => (
+            <Link key={url} href={`?image=${encodeURIComponent(url)}`}>
+              <Image
+                src={url}
+                alt={`Generated image ${index + 1}`}
+                width={96}
+                height={96}
+                className="object-cover rounded-lg"
+                unoptimized
+              />
+            </Link>
+          ))}
+        </div>
       </div>
-    </div>
+
+      <Dialog
+        open={!!imageUrl}
+        onOpenChange={(open) => {
+          if (!open) {
+            router.back();
+          }
+        }}
+      >
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Generated Image</DialogTitle>
+            <DialogDescription>
+              This image will expire in 1 hour. Please download it to keep a
+              permanent copy.
+            </DialogDescription>
+          </DialogHeader>
+          {imageUrl ? (
+            <ImageViewer imageUrl={imageUrl} />
+          ) : (
+            <div>No image URL provided</div>
+          )}
+        </DialogContent>
+      </Dialog>
+    </>
   );
 }
