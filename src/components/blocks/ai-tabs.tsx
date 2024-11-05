@@ -13,6 +13,9 @@ export function AiTabs({ ai }: { ai: string }) {
         <TabsTrigger value="recraft">
           <Link href="/recraft">Recraft</Link>
         </TabsTrigger>
+        <TabsTrigger value="ideogram">
+          <Link href="/ideogram">Ideogram</Link>
+        </TabsTrigger>
       </TabsList>
     </Tabs>
   );

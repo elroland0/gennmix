@@ -5,7 +5,7 @@ import { createContext, useContext, useEffect, useState } from "react";
 type ImageContextType = {
   images: {
     id: string;
-    ai: "dall-e" | "recraft";
+    ai: "dall-e" | "recraft" | "ideogram";
     model: string;
     prompt: string;
     size: string;
@@ -13,7 +13,7 @@ type ImageContextType = {
     expiresAt: number;
   }[];
   addImage: (
-    ai: "dall-e" | "recraft",
+    ai: "dall-e" | "recraft" | "ideogram",
     model: string,
     prompt: string,
     size: string,
@@ -29,7 +29,7 @@ export function ImageProvider({ children }: { children: React.ReactNode }) {
   const [images, setImages] = useState<
     {
       id: string;
-      ai: "dall-e" | "recraft";
+      ai: "dall-e" | "recraft" | "ideogram";
       model: string;
       prompt: string;
       size: string;
@@ -43,7 +43,7 @@ export function ImageProvider({ children }: { children: React.ReactNode }) {
     if (storedImages) {
       const parsedImages = JSON.parse(storedImages) as {
         id: string;
-        ai: "dall-e" | "recraft";
+        ai: "dall-e" | "recraft" | "ideogram";
         model: string;
         prompt: string;
         size: string;
@@ -62,7 +62,7 @@ export function ImageProvider({ children }: { children: React.ReactNode }) {
   }, []);
 
   const addImage = (
-    ai: "dall-e" | "recraft",
+    ai: "dall-e" | "recraft" | "ideogram",
     model: string,
     prompt: string,
     size: string,
