@@ -24,7 +24,7 @@ export function ImageViewer({
     id: string;
     url: string;
     expiresAt: number;
-    ai: "dall-e" | "recraft";
+    ai: "dall-e" | "recraft" | "ideogram";
     model: string;
     prompt: string;
     size: string;
