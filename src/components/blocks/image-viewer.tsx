@@ -24,10 +24,10 @@ export function ImageViewer({
     id: string;
     url: string;
     expiresAt: number;
-    ai?: "dall-e" | "recraft";
-    model?: string;
-    prompt?: string;
-    size?: string;
+    ai: "dall-e" | "recraft";
+    model: string;
+    prompt: string;
+    size: string;
   };
 }) {
   const [isDownloading, setIsDownloading] = useState(false);
@@ -38,7 +38,7 @@ export function ImageViewer({
     setIsDownloading(true);
     try {
       let blob: Blob;
-      if (!image.ai || image.ai === "dall-e") {
+      if (image.ai === "dall-e") {
         const res = await fetch(
           `/image/download?url=${encodeURIComponent(image.url)}`,
           {
@@ -76,7 +76,7 @@ export function ImageViewer({
     setIsCopying(true);
     try {
       let blob: Blob;
-      if (!image.ai || image.ai === "dall-e") {
+      if (image.ai === "dall-e") {
         const response = await fetch(
           `/image/download?url=${encodeURIComponent(image.url)}`,
           {
@@ -125,25 +125,20 @@ export function ImageViewer({
       <DialogContent>
         <DialogHeader>
           <DialogTitle className="flex items-center gap-2">
-            {!image.ai || image.ai === "dall-e"
-              ? "DALL-E Image"
-              : "Recraft Image"}
-            {image.model && <Badge>{image.model}</Badge>}
-            {image.size && <Badge variant="outline">{image.size}</Badge>}
-            {image.prompt && (
-              // defaultOpen={false} doesn't work here why?
-              <Tooltip defaultOpen={false}>
-                <TooltipTrigger>
-                  <Badge variant="outline" className="flex items-center">
-                    <Pencil1Icon className="w-3 h-3 mr-1 mt-[2px]" />
-                    prompt
-                  </Badge>
-                </TooltipTrigger>
-                <TooltipContent>
-                  <p>{image.prompt}</p>
-                </TooltipContent>
-              </Tooltip>
-            )}
+            {image.ai === "dall-e" ? "DALL-E Image" : "Recraft Image"}
+            <Badge>{image.model}</Badge>
+            <Badge variant="outline">{image.size}</Badge>
+            <Tooltip defaultOpen={false}>
+              <TooltipTrigger>
+                <Badge variant="outline" className="flex items-center">
+                  <Pencil1Icon className="w-3 h-3 mr-1 mt-[2px]" />
+                  prompt
+                </Badge>
+              </TooltipTrigger>
+              <TooltipContent>
+                <p>{image.prompt}</p>
+              </TooltipContent>
+            </Tooltip>
           </DialogTitle>
           <DialogDescription>
             {!Number.isFinite(image.expiresAt)
