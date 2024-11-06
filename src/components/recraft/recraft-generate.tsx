@@ -39,10 +39,12 @@ import {
   Substyle,
   substyles,
 } from "./recraft-types";
+import { ColorPickers } from "../blocks/color-pickers";
 
 export function RecraftGenerate() {
   const [model, setModel] = useState<Model>("recraftv3");
   const [prompt, setPrompt] = useState<string>("");
+  const [colors, setColors] = useState<{ r: number; g: number; b: number }[]>();
   const [randomSeed, setRandomSeed] = useState<number>();
   const [size, setSize] = useState<Size>("1024x1024");
   const [style, setStyle] = useState<Style>({
@@ -80,6 +82,11 @@ export function RecraftGenerate() {
             size,
             style: style.base,
             substyle: style.substyle,
+            controls: {
+              colors: colors?.map((color) => ({
+                rgb: [color.r, color.g, color.b],
+              })),
+            },
           }),
         }
       );
@@ -141,6 +148,13 @@ export function RecraftGenerate() {
             value={prompt}
             onChange={(e) => setPrompt(e.target.value)}
           />
+        </div>
+
+        <div className="space-y-2">
+          <Label htmlFor="color">Color</Label>
+          <div className="flex items-center gap-2">
+            <ColorPickers onChange={(colors) => setColors(colors)} />
+          </div>
         </div>
 
         <div className="space-y-2">
