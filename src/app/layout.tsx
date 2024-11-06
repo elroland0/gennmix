@@ -27,12 +27,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={inter.className}>
-        <CSPostHogProvider
-          env={{
-            NEXT_PUBLIC_POSTHOG_KEY: process.env.NEXT_PUBLIC_POSTHOG_KEY!,
-            NEXT_PUBLIC_POSTHOG_HOST: process.env.NEXT_PUBLIC_POSTHOG_HOST!,
-          }}
-        >
+        <CSPostHogProvider>
           <TooltipProvider>
             <ImageProvider>
               <div className="flex flex-col h-screen">
