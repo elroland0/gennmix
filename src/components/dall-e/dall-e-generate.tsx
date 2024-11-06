@@ -31,15 +31,12 @@ import {
   SelectValue,
 } from "../ui/select";
 import { useImages } from "@/contexts/image-context";
+import { Model, models, Size, sizes, Style } from "./dall-e-types";
 
-export type Model = "dall-e-3-standard" | "dall-e-3-hd" | "dall-e-2";
-export type ImageSize = "256x256" | "512x512" | "1024x1024";
-export type Style = "vivid" | "natural";
-
-export function DalleForm() {
+export function DallEGenerate() {
   const [prompt, setPrompt] = useState<string>("");
   const [model, setModel] = useState<Model>("dall-e-3-standard");
-  const [imageSize, setImageSize] = useState<ImageSize>("1024x1024");
+  const [size, setSize] = useState<Size>("1024x1024");
   const [style, setStyle] = useState<Style>("vivid");
   const [apiKey, setApiKey] = useState<string>("");
   const [rememberApiKey, setRememberApiKey] = useState(false);
@@ -69,7 +66,7 @@ export function DalleForm() {
             quality: model === "dall-e-3-hd" ? "hd" : "standard",
             prompt,
             n: 1,
-            size: imageSize,
+            size,
           }),
         }
       );
@@ -84,7 +81,7 @@ export function DalleForm() {
         "dall-e",
         model,
         prompt,
-        imageSize,
+        size,
         imageUrl,
         Date.now() + 1000 * 60 * 60
       );
@@ -144,29 +141,20 @@ export function DalleForm() {
         </div>
 
         <div className="space-y-2">
-          <Label>Image Size</Label>
+          <Label>Size</Label>
           <Select
-            defaultValue={imageSize}
-            onValueChange={(value) => setImageSize(value as ImageSize)}
+            defaultValue={size}
+            onValueChange={(value) => setSize(value as Size)}
           >
             <SelectTrigger>
               <SelectValue />
             </SelectTrigger>
             <SelectContent>
-              {model === "dall-e-2" && (
-                <>
-                  <SelectItem value="1024x1024">1024x1024</SelectItem>
-                  <SelectItem value="512x512">512x512</SelectItem>
-                  <SelectItem value="256x256">256x256</SelectItem>
-                </>
-              )}
-              {model !== "dall-e-2" && (
-                <>
-                  <SelectItem value="1792x1024">1792x1024</SelectItem>
-                  <SelectItem value="1024x1792">1024x1792</SelectItem>
-                  <SelectItem value="1024x1024">1024x1024</SelectItem>
-                </>
-              )}
+              {sizes[model].map((size) => (
+                <SelectItem key={size} value={size}>
+                  {size}
+                </SelectItem>
+              ))}
             </SelectContent>
           </Select>
         </div>
