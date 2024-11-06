@@ -122,12 +122,12 @@ export function DallEGenerate() {
         </div>
 
         <div className="space-y-2">
-          <Label>Model</Label>
+          <Label htmlFor="model">Model</Label>
           <Select
             defaultValue={model}
             onValueChange={(value) => setModel(value as Model)}
           >
-            <SelectTrigger>
+            <SelectTrigger id="model">
               <SelectValue />
             </SelectTrigger>
             <SelectContent>
@@ -141,12 +141,12 @@ export function DallEGenerate() {
         </div>
 
         <div className="space-y-2">
-          <Label>Size</Label>
+          <Label htmlFor="size">Size</Label>
           <Select
             defaultValue={size}
             onValueChange={(value) => setSize(value as Size)}
           >
-            <SelectTrigger>
+            <SelectTrigger id="size">
               <SelectValue />
             </SelectTrigger>
             <SelectContent>
@@ -161,12 +161,12 @@ export function DallEGenerate() {
 
         {model !== "dall-e-2" && (
           <div className="space-y-2">
-            <Label>Style</Label>
+            <Label htmlFor="style">Style</Label>
             <Select
               defaultValue={style}
               onValueChange={(value) => setStyle(value as Style)}
             >
-              <SelectTrigger>
+              <SelectTrigger id="style">
                 <SelectValue />
               </SelectTrigger>
               <SelectContent>
