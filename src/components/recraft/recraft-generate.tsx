@@ -144,8 +144,9 @@ export function RecraftGenerate() {
         </div>
 
         <div className="space-y-2">
-          <Label>Random Seed</Label>
+          <Label htmlFor="randomSeed">Random Seed</Label>
           <Input
+            id="randomSeed"
             type="number"
             value={randomSeed}
             onChange={(e) => setRandomSeed(Number(e.target.value))}
@@ -153,12 +154,12 @@ export function RecraftGenerate() {
         </div>
 
         <div className="space-y-2">
-          <Label>Model</Label>
+          <Label htmlFor="model">Model</Label>
           <Select
             defaultValue={model}
             onValueChange={(value) => setModel(value as Model)}
           >
-            <SelectTrigger>
+            <SelectTrigger id="model">
               <SelectValue />
             </SelectTrigger>
             <SelectContent>
@@ -170,12 +171,12 @@ export function RecraftGenerate() {
         </div>
 
         <div className="space-y-2">
-          <Label>Image Size</Label>
+          <Label htmlFor="size">Image Size</Label>
           <Select
             defaultValue={size}
             onValueChange={(value) => setSize(value as Size)}
           >
-            <SelectTrigger>
+            <SelectTrigger id="size">
               <SelectValue />
             </SelectTrigger>
             <SelectContent>
@@ -189,14 +190,14 @@ export function RecraftGenerate() {
         </div>
 
         <div className="space-y-2">
-          <Label>Style</Label>
+          <Label htmlFor="style">Style</Label>
           <Select
             defaultValue={style.base}
             onValueChange={(value) =>
               setStyle((prev) => ({ ...prev, base: value as Style["base"] }))
             }
           >
-            <SelectTrigger>
+            <SelectTrigger id="style">
               <SelectValue />
             </SelectTrigger>
             <SelectContent>
@@ -213,7 +214,7 @@ export function RecraftGenerate() {
         </div>
 
         <div className="space-y-2">
-          <Label>Substyle</Label>
+          <Label htmlFor="substyle">Substyle</Label>
           <Select
             defaultValue={style.substyle || "none"}
             onValueChange={(value) =>
@@ -223,7 +224,7 @@ export function RecraftGenerate() {
               }))
             }
           >
-            <SelectTrigger>
+            <SelectTrigger id="substyle">
               <SelectValue />
             </SelectTrigger>
             <SelectContent>
