@@ -7,6 +7,7 @@ import { ImageList } from "@/components/blocks/image-list";
 import { Suspense } from "react";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { Header } from "@/components/common/header";
+import { CSPostHogProvider } from "./providers";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -26,22 +27,24 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={inter.className}>
-        <TooltipProvider>
-          <ImageProvider>
-            <div className="flex flex-col h-screen">
-              <div className="flex-1 overflow-y-auto flex flex-col">
-                <Header />
-                <main className="flex-1 flex flex-col items-center px-4">
-                  {children}
-                </main>
+        <CSPostHogProvider>
+          <TooltipProvider>
+            <ImageProvider>
+              <div className="flex flex-col h-screen">
+                <div className="flex-1 overflow-y-auto flex flex-col">
+                  <Header />
+                  <main className="flex-1 flex flex-col items-center px-4">
+                    {children}
+                  </main>
+                </div>
+                <Suspense fallback={null}>
+                  <ImageList />
+                </Suspense>
               </div>
-              <Suspense fallback={null}>
-                <ImageList />
-              </Suspense>
-            </div>
-          </ImageProvider>
-        </TooltipProvider>
-        <Toaster />
+            </ImageProvider>
+          </TooltipProvider>
+          <Toaster />
+        </CSPostHogProvider>
       </body>
     </html>
   );
