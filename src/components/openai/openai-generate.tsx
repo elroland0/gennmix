@@ -78,7 +78,7 @@ export function OpenAiGenerate() {
       const imageData = (await response.json()) as { data: { url: string }[] };
       const imageUrl = imageData.data[0].url;
       const { id } = addImage(
-        "dall-e",
+        "openai",
         data.model,
         data.prompt,
         data.size,
