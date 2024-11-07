@@ -6,8 +6,10 @@ import { Cross2Icon, PlusIcon } from "@radix-ui/react-icons";
 import { useEffect, useState } from "react";
 
 export function ColorPickers({
+  id,
   onChange,
 }: {
+  id: string;
   onChange: (colors: { r: number; g: number; b: number }[]) => void;
 }) {
   const [open, setOpen] = useState(false);
@@ -34,6 +36,7 @@ export function ColorPickers({
           />
         ))}
         <PopoverTrigger
+          id={id}
           className="w-10 h-10 flex items-center justify-center rounded-md border border-border cursor-pointer"
           onClick={() => {
             const key = crypto.randomUUID();

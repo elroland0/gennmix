@@ -32,6 +32,7 @@ import {
 } from "../ui/tooltip";
 import { InfoCircledIcon } from "@radix-ui/react-icons";
 import { Switch } from "../ui/switch";
+import { ColorPickers } from "../blocks/color-pickers";
 
 export function GenForm<T extends z.ZodTypeAny>({
   ai,
@@ -261,6 +262,13 @@ function generateField(
                   ))}
                 </SelectContent>
               </Select>
+            ) : name === "colors" && schema instanceof z.ZodArray ? (
+              <ColorPickers
+                id={name}
+                onChange={(colors) =>
+                  field.onChange(colors.map((c) => [c.r, c.g, c.b]))
+                }
+              />
             ) : schema instanceof z.ZodEffects ? (
               <Input
                 id={name}
