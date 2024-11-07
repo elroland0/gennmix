@@ -24,7 +24,7 @@ export function ImageViewer({
     id: string;
     url: string;
     expiresAt: number;
-    ai: "dall-e" | "recraft" | "ideogram";
+    ai: "openai" | "recraft" | "ideogram";
     model: string;
     prompt: string;
     size: string;
@@ -38,7 +38,7 @@ export function ImageViewer({
     setIsDownloading(true);
     try {
       let blob: Blob;
-      if (image.ai === "dall-e" || image.ai === "ideogram") {
+      if (image.ai === "openai" || image.ai === "ideogram") {
         const res = await fetch(
           `/image/download?url=${encodeURIComponent(image.url)}`,
           {
@@ -76,7 +76,7 @@ export function ImageViewer({
     setIsCopying(true);
     try {
       let blob: Blob;
-      if (image.ai === "dall-e" || image.ai === "ideogram") {
+      if (image.ai === "openai" || image.ai === "ideogram") {
         const response = await fetch(
           `/image/download?url=${encodeURIComponent(image.url)}`,
           {
@@ -125,7 +125,7 @@ export function ImageViewer({
       <DialogContent>
         <DialogHeader>
           <DialogTitle className="flex items-center gap-2">
-            {image.ai === "dall-e" ? "DALL-E Image" : "Recraft Image"}
+            {image.ai === "openai" ? "OpenAI Image" : "Recraft Image"}
             <Badge>{image.model}</Badge>
             <Badge variant="outline">{image.size}</Badge>
             <Tooltip defaultOpen={false}>
