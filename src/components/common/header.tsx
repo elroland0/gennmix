@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { FeedbackPopover } from "../blocks/feedback-popover";
+import { FeedbackPopover } from "./feedback-popover";
 
 export function Header() {
   return (

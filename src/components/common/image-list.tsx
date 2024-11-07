@@ -4,7 +4,7 @@ import { useImages } from "@/contexts/image-context";
 import Image from "next/image";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
-import { ImageViewer } from "@/components/blocks/image-viewer";
+import { ImageViewer } from "@/components/common/image-viewer";
 
 export function ImageList() {
   const { images } = useImages();
