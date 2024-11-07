@@ -17,7 +17,7 @@ export function ImageList() {
 
   return (
     <>
-      <div className="overflow-x-auto h-32 p-4 shadow-inner">
+      <div className="w-full overflow-x-auto h-32 p-4 shadow-inner">
         <div className="space-x-4 flex items-center min-w-max">
           {images.map(({ id, url }, index) => (
             <Link key={id} href={`?image=${id}`}>

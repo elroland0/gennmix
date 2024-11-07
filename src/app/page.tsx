@@ -1,13 +1,39 @@
 import { AiTabs } from "@/components/common/ai-tabs";
+import pictures from "../../public/pictures.svg";
+import pictures2 from "../../public/pictures2.svg";
+import Image from "next/image";
+import { Header } from "@/components/common/header";
 
 export default function Home() {
   return (
-    <div className="h-full flex flex-col justify-center items-center">
-      <h1 className="text-4xl font-semibold mb-4">Select an AI service</h1>
-      <p className="text-sm text-neutral-500 mb-8">
-        Generate images using various AI services with your API keys
-      </p>
-      <AiTabs ai="" />
+    <div className="h-screen flex flex-col">
+      <Header />
+      <div className="h-full flex items-center justify-center px-4 mb-16">
+        <div className="flex-1 flex justify-center">
+          <Image
+            src={pictures}
+            alt="pictures"
+            className="hidden xl:block max-w-xs translate-y-20"
+          />
+        </div>
+        <div className="flex-initial flex flex-col items-center">
+          <h1 className="max-w-2xl text-3xl md:text-7xl text-center font-semibold md:leading-[0.75] mb-4">
+            Web UI Client for{" "}
+            <span className="text-3xl">Generative AI Models</span>
+          </h1>
+          <p className="text-neutral-500 mb-8">
+            Generate images using various AI services with your API keys
+          </p>
+          <AiTabs ai="" />
+        </div>
+        <div className="flex-1 flex justify-center">
+          <Image
+            src={pictures2}
+            alt="pictures"
+            className="hidden xl:block max-w-xs -translate-y-20"
+          />
+        </div>
+      </div>
     </div>
   );
 }

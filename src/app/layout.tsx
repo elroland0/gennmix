@@ -29,19 +29,7 @@ export default function RootLayout({
       <body className={inter.className}>
         <CSPostHogProvider>
           <TooltipProvider>
-            <ImageProvider>
-              <div className="flex flex-col h-screen">
-                <div className="flex-1 overflow-y-auto flex flex-col">
-                  <Header />
-                  <main className="flex-1 flex flex-col items-center px-4">
-                    {children}
-                  </main>
-                </div>
-                <Suspense fallback={null}>
-                  <ImageList />
-                </Suspense>
-              </div>
-            </ImageProvider>
+            <ImageProvider>{children}</ImageProvider>
           </TooltipProvider>
           <Toaster />
         </CSPostHogProvider>
