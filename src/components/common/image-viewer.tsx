@@ -125,7 +125,11 @@ export function ImageViewer({
       <DialogContent>
         <DialogHeader>
           <DialogTitle className="flex items-center gap-2">
-            {image.ai === "openai" ? "OpenAI Image" : "Recraft Image"}
+            {image.ai === "openai"
+              ? "OpenAI Image"
+              : image.ai === "recraft"
+              ? "Recraft Image"
+              : "Ideogram Image"}
             <Badge>{image.model}</Badge>
             <Badge variant="outline">{image.size}</Badge>
             <Tooltip defaultOpen={false}>
@@ -141,9 +145,18 @@ export function ImageViewer({
             </Tooltip>
           </DialogTitle>
           <DialogDescription>
-            {!Number.isFinite(image.expiresAt)
-              ? "This image will expire in 1 hour. Please download it to keep a permanent copy."
-              : "This image can be lost if the browser cache is cleared. Please download it to keep a permanent copy."}
+            <p className="text-xs mt-2">
+              Please download it to keep a permanent copy.
+            </p>
+            {image.ai === "openai" ? (
+              <p className="text-xs mt-1">
+                Expires at: {new Date(image.expiresAt).toLocaleString()}
+              </p>
+            ) : image.ai === "recraft" ? null : image.ai === "ideogram" ? (
+              <p className="text-xs mt-1">
+                Expires at: {new Date(image.expiresAt).toLocaleString()}
+              </p>
+            ) : null}
           </DialogDescription>
         </DialogHeader>
         <div>
