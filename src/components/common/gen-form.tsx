@@ -52,7 +52,7 @@ export function GenForm<T extends z.ZodTypeAny>({
   const [rememberApiKey, setRememberApiKey] = useState(false);
   const form = useForm({
     resolver: zodResolver(schema.and(z.object({ apiKey: z.string().min(1) }))),
-    defaultValues: getDefaults(schema),
+    defaultValues: { ...getDefaults(schema), apiKey: "" },
   });
 
   useEffect(() => {
@@ -241,7 +241,11 @@ function generateField(
               schema.description === "textarea" ? (
                 <Textarea id={name} {...field} />
               ) : (
-                <Input id={name} {...field} />
+                <Input
+                  id={name}
+                  value={field.value ?? ""}
+                  onChange={field.onChange}
+                />
               )
             ) : schema instanceof z.ZodNumber ? (
               <Input id={name} type="number" {...field} />

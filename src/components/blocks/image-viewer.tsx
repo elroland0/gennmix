@@ -38,7 +38,7 @@ export function ImageViewer({
     setIsDownloading(true);
     try {
       let blob: Blob;
-      if (image.ai === "dall-e") {
+      if (image.ai === "dall-e" || image.ai === "ideogram") {
         const res = await fetch(
           `/image/download?url=${encodeURIComponent(image.url)}`,
           {
@@ -76,7 +76,7 @@ export function ImageViewer({
     setIsCopying(true);
     try {
       let blob: Blob;
-      if (image.ai === "dall-e") {
+      if (image.ai === "dall-e" || image.ai === "ideogram") {
         const response = await fetch(
           `/image/download?url=${encodeURIComponent(image.url)}`,
           {
