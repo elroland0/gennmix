@@ -9,7 +9,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
       priority: 1,
     },
     {
-      url: "https://gennmix.com/dall-e",
+      url: "https://gennmix.com/openai",
       lastModified: new Date(),
       changeFrequency: "weekly",
       priority: 0.8,
