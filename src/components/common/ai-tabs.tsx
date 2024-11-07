@@ -7,8 +7,8 @@ export function AiTabs({ ai }: { ai: string }) {
   return (
     <Tabs value={ai}>
       <TabsList>
-        <TabsTrigger value="dall-e">
-          <Link href="/dall-e">DALL-E</Link>
+        <TabsTrigger value="openai">
+          <Link href="/openai">OpenAI</Link>
         </TabsTrigger>
         <TabsTrigger value="recraft">
           <Link href="/recraft">Recraft</Link>

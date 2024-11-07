@@ -1,4 +1,4 @@
-import { AiTabs } from "@/components/blocks/ai-tabs";
+import { AiTabs } from "@/components/common/ai-tabs";
 
 export default function Home() {
   return (
