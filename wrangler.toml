@@ -10,7 +10,3 @@ minify = true
 
 # Use the new Workers + Assets to host the static frontend files
 assets = { directory = ".worker-next/assets", binding = "ASSETS" }
-
-[vars]
-NEXT_PUBLIC_POSTHOG_KEY = "phc_vwfbJZ4szffpJZwCvRIK7LgeNIhyKFsKkXr4a9mvqXL"
-NEXT_PUBLIC_POSTHOG_HOST = "https://us.i.posthog.com"
