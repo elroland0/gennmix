@@ -73,6 +73,7 @@ export function IdeogramGenerate() {
     data: z.infer<typeof schema> & { apiKey: string }
   ) => {
     try {
+      setIsSubmitting(true);
       const generated = await generateIdeogram(
         data.apiKey,
         JSON.stringify({
@@ -87,8 +88,12 @@ export function IdeogramGenerate() {
               data.model === "V_2" || data.model === "V_2_TURBO"
                 ? data.style
                 : undefined,
-            color_palette:
-              data.colorPaletteType === "name" ? data.colorPalette : undefined,
+            color_palette: {
+              name:
+                data.colorPaletteType === "name"
+                  ? data.colorPalette
+                  : undefined,
+            },
             aspect_ratio: data.size.startsWith("ASPECT")
               ? data.size
               : undefined,
@@ -100,14 +105,15 @@ export function IdeogramGenerate() {
       );
 
       const imageUrl = generated.data[0].url;
-      const { id } = addImage(
-        "ideogram",
-        data.model,
-        data.prompt,
-        data.size,
-        imageUrl,
-        Date.now() + 1000 * 60 * 60 * 24
-      );
+      const { id } = addImage({
+        type: "generate",
+        ai: "ideogram",
+        model: data.model,
+        prompt: data.prompt,
+        size: data.size,
+        url: imageUrl,
+        expiresAt: Date.now() + 1000 * 60 * 60 * 24,
+      });
       router.push(`?image=${id}`);
     } catch (err) {
       if (err instanceof Error) {

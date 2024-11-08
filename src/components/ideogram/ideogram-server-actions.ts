@@ -10,7 +10,8 @@ export const generateIdeogram = async (apiKey: string, body: string) => {
     body,
   });
   if (!response.ok) {
-    throw new Error("Failed to generate ideogram");
+    const err = (await response.json()) as { detail: string };
+    throw new Error(err.detail);
   }
   return (await response.json()) as {
     created: string;
