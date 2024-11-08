@@ -77,14 +77,15 @@ export function OpenAiGenerate() {
 
       const imageData = (await response.json()) as { data: { url: string }[] };
       const imageUrl = imageData.data[0].url;
-      const { id } = addImage(
-        "openai",
-        data.model,
-        data.prompt,
-        data.size,
-        imageUrl,
-        Date.now() + 1000 * 60 * 60
-      );
+      const { id } = addImage({
+        type: "generate",
+        ai: "openai",
+        model: data.model,
+        prompt: data.prompt,
+        size: data.size,
+        url: imageUrl,
+        expiresAt: Date.now() + 1000 * 60 * 60,
+      });
       router.push(`?image=${id}`);
     } catch (err) {
       if (err instanceof Error) {

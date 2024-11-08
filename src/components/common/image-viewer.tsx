@@ -16,20 +16,9 @@ import { useRouter } from "next/navigation";
 import { Badge } from "../ui/badge";
 import { Tooltip, TooltipContent, TooltipTrigger } from "../ui/tooltip";
 import mime from "mime";
+import { Image as ImageType } from "@/contexts/image-context";
 
-export function ImageViewer({
-  image,
-}: {
-  image: {
-    id: string;
-    url: string;
-    expiresAt: number;
-    ai: "openai" | "recraft" | "ideogram";
-    model: string;
-    prompt: string;
-    size: string;
-  };
-}) {
+export function ImageViewer({ image }: { image: ImageType }) {
   const [isDownloading, setIsDownloading] = useState(false);
   const [isCopying, setIsCopying] = useState(false);
   const router = useRouter();
@@ -124,26 +113,35 @@ export function ImageViewer({
     >
       <DialogContent>
         <DialogHeader>
-          <DialogTitle className="flex items-center gap-2">
+          <DialogTitle>
             {image.ai === "openai"
               ? "OpenAI Image"
               : image.ai === "recraft"
               ? "Recraft Image"
               : "Ideogram Image"}
-            <Badge>{image.model}</Badge>
-            <Badge variant="outline">{image.size}</Badge>
-            <Tooltip defaultOpen={false}>
-              <TooltipTrigger>
-                <Badge variant="outline" className="flex items-center">
-                  <Pencil1Icon className="w-3 h-3 mr-1 mt-[2px]" />
-                  prompt
-                </Badge>
-              </TooltipTrigger>
-              <TooltipContent>
-                <p>{image.prompt}</p>
-              </TooltipContent>
-            </Tooltip>
           </DialogTitle>
+          <div className="flex items-center gap-2 pt-2">
+            <Badge>{image.type || "generate"}</Badge>
+            {(!image.type || image.type === "generate") && (
+              <Badge variant="outline">{image.model}</Badge>
+            )}
+            {(!image.type || image.type === "generate") && (
+              <Badge variant="outline">{image.size}</Badge>
+            )}
+            {(!image.type || image.type === "generate") && (
+              <Tooltip defaultOpen={false}>
+                <TooltipTrigger>
+                  <Badge variant="outline" className="flex items-center">
+                    <Pencil1Icon className="w-3 h-3 mr-1 mt-[2px]" />
+                    prompt
+                  </Badge>
+                </TooltipTrigger>
+                <TooltipContent>
+                  <p>{image.prompt}</p>
+                </TooltipContent>
+              </Tooltip>
+            )}
+          </div>
           <DialogDescription>
             <p className="text-xs mt-2">
               Please download it to keep a permanent copy.

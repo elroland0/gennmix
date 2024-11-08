@@ -2,58 +2,42 @@
 
 import { createContext, useContext, useEffect, useState } from "react";
 
+type Ai = "openai" | "recraft" | "ideogram";
+type ImageGenerateInput = {
+  type?: "generate";
+  ai: Ai;
+  model: string;
+  prompt: string;
+  size: string;
+  url: string;
+  expiresAt: number;
+};
+type ImageVectorizeInput = {
+  type: "vectorize";
+  ai: Ai;
+  url: string;
+  expiresAt: number;
+};
+export type Image = { id: string } & (ImageGenerateInput | ImageVectorizeInput);
+
 type ImageContextType = {
-  images: {
-    id: string;
-    ai: "openai" | "recraft" | "ideogram";
-    model: string;
-    prompt: string;
-    size: string;
-    url: string;
-    expiresAt: number;
-  }[];
-  addImage: (
-    ai: "openai" | "recraft" | "ideogram",
-    model: string,
-    prompt: string,
-    size: string,
-    url: string,
-    expiresAt: number
-  ) => { id: string };
+  images: Image[];
+  addImage: (data: ImageGenerateInput | ImageVectorizeInput) => { id: string };
   clearImages: () => void;
 };
 
 const ImageContext = createContext<ImageContextType | undefined>(undefined);
 
 export function ImageProvider({ children }: { children: React.ReactNode }) {
-  const [images, setImages] = useState<
-    {
-      id: string;
-      ai: "openai" | "recraft" | "ideogram";
-      model: string;
-      prompt: string;
-      size: string;
-      url: string;
-      expiresAt: number;
-    }[]
-  >([]);
+  const [images, setImages] = useState<Image[]>([]);
 
   useEffect(() => {
     const storedImages = localStorage.getItem("images");
     if (storedImages) {
-      const parsedImages = JSON.parse(storedImages) as {
-        id: string;
-        ai: "openai" | "recraft" | "ideogram";
-        model: string;
-        prompt: string;
-        size: string;
-        url: string;
-        expiresAt: number;
-      }[];
+      const parsedImages = JSON.parse(storedImages) as Image[];
       const filteredImages = parsedImages.filter(
         (image) => image.expiresAt > Date.now()
       );
-
       setImages(filteredImages);
       localStorage.setItem("images", JSON.stringify(filteredImages));
     } else {
@@ -61,19 +45,10 @@ export function ImageProvider({ children }: { children: React.ReactNode }) {
     }
   }, []);
 
-  const addImage = (
-    ai: "openai" | "recraft" | "ideogram",
-    model: string,
-    prompt: string,
-    size: string,
-    url: string,
-    expiresAt: number
-  ) => {
+  const addImage = (data: ImageGenerateInput | ImageVectorizeInput) => {
     const id = crypto.randomUUID();
-    const newImages = [
-      { id, ai, model, prompt, size, url, expiresAt },
-      ...images,
-    ];
+    const newImage = { ...data, id } as Image;
+    const newImages = [newImage, ...images];
     localStorage.setItem("images", JSON.stringify(newImages));
     setImages(newImages);
     return { id };
