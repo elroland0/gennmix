@@ -18,11 +18,23 @@ type ImageVectorizeInput = {
   url: string;
   expiresAt: number;
 };
-export type Image = { id: string } & (ImageGenerateInput | ImageVectorizeInput);
+type ImageRemoveBackgroundInput = {
+  type: "remove-background";
+  ai: "recraft";
+  url: string;
+  expiresAt: number;
+};
+export type Image = { id: string } & (
+  | ImageGenerateInput
+  | ImageVectorizeInput
+  | ImageRemoveBackgroundInput
+);
 
 type ImageContextType = {
   images: Image[];
-  addImage: (data: ImageGenerateInput | ImageVectorizeInput) => { id: string };
+  addImage: (
+    data: ImageGenerateInput | ImageVectorizeInput | ImageRemoveBackgroundInput
+  ) => { id: string };
   clearImages: () => void;
 };
 
@@ -45,7 +57,9 @@ export function ImageProvider({ children }: { children: React.ReactNode }) {
     }
   }, []);
 
-  const addImage = (data: ImageGenerateInput | ImageVectorizeInput) => {
+  const addImage = (
+    data: ImageGenerateInput | ImageVectorizeInput | ImageRemoveBackgroundInput
+  ) => {
     const id = crypto.randomUUID();
     const newImage = { ...data, id } as Image;
     const newImages = [newImage, ...images];
