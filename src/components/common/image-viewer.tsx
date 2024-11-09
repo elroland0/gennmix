@@ -27,7 +27,11 @@ export function ImageViewer({ image }: { image: ImageType }) {
     setIsDownloading(true);
     try {
       let blob: Blob;
-      if (image.ai === "openai" || image.ai === "ideogram") {
+      if (
+        image.ai === "openai" ||
+        image.ai === "ideogram" ||
+        image.ai === "black-forest-labs"
+      ) {
         const res = await fetch(
           `/image/download?url=${encodeURIComponent(image.url)}`,
           {
@@ -65,7 +69,11 @@ export function ImageViewer({ image }: { image: ImageType }) {
     setIsCopying(true);
     try {
       let blob: Blob;
-      if (image.ai === "openai" || image.ai === "ideogram") {
+      if (
+        image.ai === "openai" ||
+        image.ai === "ideogram" ||
+        image.ai === "black-forest-labs"
+      ) {
         const response = await fetch(
           `/image/download?url=${encodeURIComponent(image.url)}`,
           {
