@@ -33,6 +33,7 @@ import {
 import { InfoCircledIcon } from "@radix-ui/react-icons";
 import { Switch } from "../ui/switch";
 import { ColorPickers } from "../blocks/color-pickers";
+import { Ai } from "@/contexts/image-context";
 
 export function GenForm<T extends z.ZodTypeAny>({
   ai,
@@ -42,23 +43,187 @@ export function GenForm<T extends z.ZodTypeAny>({
   isSubmitting,
   onSubmit,
 }: {
-  ai: "openai" | "recraft" | "ideogram";
+  ai: Ai;
   title: string;
   schema: T;
   submitText: string;
   onSubmit: (values: z.infer<T> & { apiKey: string }) => void;
   isSubmitting: boolean;
 }) {
+  const [_, forceUpdate] = useState(0);
   const [rememberApiKey, setRememberApiKey] = useState(false);
+
+  const schemaWithApiKey = schema.and(
+    z.object({ apiKey: z.string().min(1).default("") })
+  );
+
   const form = useForm({
-    resolver: zodResolver(schema.and(z.object({ apiKey: z.string().min(1) }))),
-    defaultValues: { ...getDefaults(schema), apiKey: "" },
+    resolver: zodResolver(schemaWithApiKey),
+    defaultValues: { ...getDefaults(schemaWithApiKey) },
   });
+
+  function generateField(
+    schema: z.ZodTypeAny,
+    {
+      name,
+      optional,
+      discriminatorValue,
+    }: {
+      name?: string;
+      optional?: boolean;
+      discriminatorValue?: string;
+    }
+  ): React.ReactNode {
+    if (schema instanceof z.ZodObject) {
+      return Object.entries(schema.shape).map(([name, schema]: [string, any]) =>
+        generateField(schema, {
+          name,
+          optional,
+          discriminatorValue,
+        })
+      );
+    }
+    if (schema instanceof z.ZodDefault) {
+      return generateField(schema._def.innerType, {
+        name,
+        optional,
+        discriminatorValue,
+      });
+    }
+    if (schema instanceof z.ZodOptional) {
+      return generateField(schema._def.innerType, {
+        name,
+        optional: true,
+        discriminatorValue,
+      });
+    }
+    if (schema instanceof z.ZodIntersection) {
+      return [
+        generateField(schema._def.left, {
+          name,
+          optional,
+          discriminatorValue,
+        }),
+        generateField(schema._def.right, {
+          name,
+          optional,
+          discriminatorValue,
+        }),
+      ];
+    }
+    if (schema instanceof z.ZodDiscriminatedUnion) {
+      const discriminators = z.enum(
+        Array.from(schema._def.optionsMap.keys()) as [string, ...string[]]
+      );
+      const curDiscriminatorValue = form.getValues()[schema._def.discriminator];
+      const selected = schema._def.optionsMap.get(curDiscriminatorValue);
+      return [
+        generateField(discriminators, {
+          name: schema._def.discriminator,
+          discriminatorValue: curDiscriminatorValue,
+        }),
+        ...Object.entries(selected?.shape ?? {})
+          .filter(([name]) => name !== schema._def.discriminator)
+          .map(([name, schema]) =>
+            generateField(schema, {
+              name,
+              optional,
+              // discriminatorValue: curDiscriminatorValue,
+            })
+          ),
+      ];
+    }
+
+    if (!name) return null;
+
+    return (
+      <FormField
+        // key={discriminator ? `${discriminator}-${name}` : name}
+        key={name}
+        control={form.control}
+        // @ts-expect-error
+        name={name}
+        render={({ field }) => (
+          <FormItem>
+            <div className="flex items-center gap-2">
+              <FormLabel htmlFor={name}>
+                {name[0].toUpperCase() + name.slice(1)}
+              </FormLabel>
+              {optional && (
+                <FormDescription className="text-xs">optional</FormDescription>
+              )}
+            </div>
+            <FormControl>
+              {schema instanceof z.ZodString ? (
+                schema.description === "textarea" ? (
+                  <Textarea id={name} {...field} />
+                ) : (
+                  <Input
+                    id={name}
+                    value={field.value}
+                    onChange={field.onChange}
+                  />
+                )
+              ) : schema instanceof z.ZodNumber ? (
+                <Input
+                  id={name}
+                  type="number"
+                  {...field}
+                  onChange={(e) => {
+                    field.onChange(Number(e.target.value));
+                  }}
+                />
+              ) : schema instanceof z.ZodEnum ? (
+                <Select
+                  value={field.value}
+                  onValueChange={(value) => {
+                    field.onChange(value);
+                    if (discriminatorValue) {
+                      forceUpdate((prev) => prev + 1);
+                    }
+                  }}
+                  disabled={field.disabled}
+                >
+                  <SelectTrigger id={name}>
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {schema.options.map((option: string) => (
+                      <SelectItem key={option} value={option}>
+                        {option}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              ) : name === "colors" && schema instanceof z.ZodArray ? (
+                <ColorPickers
+                  id={name}
+                  onChange={(colors) =>
+                    field.onChange(colors.map((c) => [c.r, c.g, c.b]))
+                  }
+                />
+              ) : schema instanceof z.ZodEffects ? (
+                <Input
+                  id={name}
+                  type="file"
+                  accept="image/*"
+                  onChange={(e) => {
+                    field.onChange(e.target.files?.[0] ?? undefined);
+                  }}
+                />
+              ) : null}
+            </FormControl>
+          </FormItem>
+        )}
+      />
+    );
+  }
 
   useEffect(() => {
     const apiKey = localStorage.getItem(`${ai}-api-key`);
     if (apiKey) {
       setRememberApiKey(true);
+      // @ts-expect-error
       form.setValue("apiKey", apiKey);
     }
   }, [rememberApiKey]);
@@ -81,11 +246,12 @@ export function GenForm<T extends z.ZodTypeAny>({
               onSubmit(data as z.infer<T> & { apiKey: string });
             })}
           >
-            {generateField(form.control, form.getValues, schema, {})}
+            {generateField(schema, {})}
 
             <FormField
               key="apiKey"
               control={form.control}
+              // @ts-expect-error
               name="apiKey"
               render={({ field }) => (
                 <FormItem>
@@ -143,7 +309,7 @@ export function GenForm<T extends z.ZodTypeAny>({
 
 function getDefaults<Schema extends z.ZodTypeAny>(
   schema: Schema
-): Record<string, any> | undefined {
+): z.infer<Schema> {
   if (schema instanceof z.ZodIntersection) {
     return {
       ...getDefaults(schema._def.left),
@@ -153,6 +319,9 @@ function getDefaults<Schema extends z.ZodTypeAny>(
   if (schema instanceof z.ZodObject) {
     return Object.fromEntries(
       Object.entries(schema.shape).map(([key, value]) => {
+        if (value instanceof z.ZodLiteral) {
+          return [key, value._def.value];
+        }
         if (value instanceof z.ZodDefault)
           return [key, value._def.defaultValue()];
         return [key, undefined];
@@ -160,133 +329,13 @@ function getDefaults<Schema extends z.ZodTypeAny>(
     );
   }
   if (schema instanceof z.ZodDefault) {
-    return schema._def.defaultValue();
+    if (schema._def.innerType instanceof z.ZodDiscriminatedUnion) {
+      const discriminator = schema._def.innerType._def.discriminator;
+      const discriminatorValue = schema._def.defaultValue()[discriminator];
+      return getDefaults(
+        schema._def.innerType._def.optionsMap.get(discriminatorValue)
+      );
+    }
   }
   return undefined;
-}
-
-function generateField(
-  control: any,
-  getValues: () => { [k: string]: any },
-  schema: z.ZodTypeAny,
-  { name, optional }: { name?: string; optional?: boolean }
-): React.ReactNode {
-  if (schema instanceof z.ZodObject) {
-    return Object.entries(schema.shape).map(([name, schema]: [string, any]) =>
-      generateField(control, getValues, schema, { name, optional })
-    );
-  }
-  if (schema instanceof z.ZodDefault) {
-    return generateField(control, getValues, schema._def.innerType, {
-      name,
-      optional,
-    });
-  }
-  if (schema instanceof z.ZodOptional) {
-    return generateField(control, getValues, schema._def.innerType, {
-      name,
-      optional: true,
-    });
-  }
-  if (schema instanceof z.ZodIntersection) {
-    return [
-      generateField(control, getValues, schema._def.left, {
-        name,
-        optional,
-      }),
-      generateField(control, getValues, schema._def.right, {
-        name,
-        optional,
-      }),
-    ];
-  }
-  if (schema instanceof z.ZodDiscriminatedUnion) {
-    const discriminators = z.enum(
-      Array.from(schema._def.optionsMap.keys()) as [string, ...string[]]
-    );
-    const selected = schema._def.optionsMap.get(
-      getValues()[schema._def.discriminator]
-    );
-    return [
-      generateField(control, getValues, discriminators, {
-        name: schema._def.discriminator,
-      }),
-      ...Object.entries(selected?.shape ?? {})
-        .filter(([name]) => name !== schema._def.discriminator)
-        .map(([name, schema]) =>
-          generateField(control, getValues, schema, { name, optional })
-        ),
-    ];
-  }
-
-  if (!name) return null;
-
-  return (
-    <FormField
-      key={name}
-      control={control}
-      name={name}
-      render={({ field }) => (
-        <FormItem>
-          <div className="flex items-center gap-2">
-            <FormLabel htmlFor={name}>
-              {name[0].toUpperCase() + name.slice(1)}
-            </FormLabel>
-            {optional && (
-              <FormDescription className="text-xs">optional</FormDescription>
-            )}
-          </div>
-          <FormControl>
-            {schema instanceof z.ZodString ? (
-              schema.description === "textarea" ? (
-                <Textarea id={name} {...field} />
-              ) : (
-                <Input
-                  id={name}
-                  value={field.value ?? ""}
-                  onChange={field.onChange}
-                />
-              )
-            ) : schema instanceof z.ZodNumber ? (
-              <Input id={name} type="number" {...field} />
-            ) : schema instanceof z.ZodEnum ? (
-              <Select
-                value={field.value}
-                onValueChange={field.onChange}
-                disabled={field.disabled}
-              >
-                <SelectTrigger id={name}>
-                  <SelectValue />
-                </SelectTrigger>
-                <SelectContent>
-                  {schema.options.map((option: string) => (
-                    <SelectItem key={option} value={option}>
-                      {option}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-            ) : name === "colors" && schema instanceof z.ZodArray ? (
-              <ColorPickers
-                id={name}
-                onChange={(colors) =>
-                  field.onChange(colors.map((c) => [c.r, c.g, c.b]))
-                }
-              />
-            ) : schema instanceof z.ZodEffects ? (
-              <Input
-                id={name}
-                type="file"
-                accept="image/*"
-                onChange={(e) => {
-                  console.log(e.target.files);
-                  field.onChange(e.target.files?.[0] ?? undefined);
-                }}
-              />
-            ) : null}
-          </FormControl>
-        </FormItem>
-      )}
-    />
-  );
 }
