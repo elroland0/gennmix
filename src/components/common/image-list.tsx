@@ -38,13 +38,16 @@ export function ImageList() {
         <div ref={listRef} className="flex-1 overflow-x-auto no-scrollbar px-4">
           <div className="space-x-4 flex items-center min-w-max">
             {images.map(({ id, url }, index) => (
-              <Link key={id} href={`?image=${id}`}>
+              <Link
+                key={id}
+                href={`?image=${id}`}
+                className="w-24 h-24 relative"
+              >
                 <Image
                   src={url}
                   alt={`Generated image ${index + 1}`}
-                  width={96}
-                  height={96}
-                  className="object-cover rounded-lg"
+                  className="object-contain rounded-lg overflow-hidden"
+                  fill
                   unoptimized
                 />
               </Link>

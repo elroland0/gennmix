@@ -118,7 +118,9 @@ export function ImageViewer({ image }: { image: ImageType }) {
               ? "OpenAI Image"
               : image.ai === "recraft"
               ? "Recraft Image"
-              : "Ideogram Image"}
+              : image.ai === "ideogram"
+              ? "Ideogram Image"
+              : "Black Forest Labs Image"}
           </DialogTitle>
           <div className="flex items-center gap-2 pt-2">
             <Badge>{image.type || "generate"}</Badge>
@@ -146,15 +148,9 @@ export function ImageViewer({ image }: { image: ImageType }) {
             <p className="text-xs mt-2">
               Please download it to keep a permanent copy.
             </p>
-            {image.ai === "openai" ? (
-              <p className="text-xs mt-1">
-                Expires at: {new Date(image.expiresAt).toLocaleString()}
-              </p>
-            ) : image.ai === "recraft" ? null : image.ai === "ideogram" ? (
-              <p className="text-xs mt-1">
-                Expires at: {new Date(image.expiresAt).toLocaleString()}
-              </p>
-            ) : null}
+            <p className="text-xs mt-1">
+              Expires at: {new Date(image.expiresAt).toLocaleString()}
+            </p>
           </DialogDescription>
         </DialogHeader>
         <div>
@@ -173,13 +169,15 @@ export function ImageViewer({ image }: { image: ImageType }) {
             </Button>
           </div>
           <div className="flex justify-center p-10">
-            <Image
-              src={image.url}
-              alt="Generated Image"
-              width={256}
-              height={256}
-              unoptimized
-            />
+            <div className="w-64 h-64 relative">
+              <Image
+                src={image.url}
+                alt="Generated Image"
+                fill
+                unoptimized
+                className="object-contain"
+              />
+            </div>
           </div>
         </div>
       </DialogContent>
