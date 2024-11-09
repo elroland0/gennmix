@@ -154,9 +154,11 @@ export function ImageViewer({ image }: { image: ImageType }) {
           </div>
           <DialogDescription className="flex flex-col gap-1 text-xs pt-2">
             <span>Please download it to keep a permanent copy.</span>
-            <span>
-              Expires at: {new Date(image.expiresAt).toLocaleString()}
-            </span>
+            {image.ai !== "recraft" && (
+              <span>
+                Expires at: {new Date(image.expiresAt).toLocaleString()}
+              </span>
+            )}
           </DialogDescription>
         </DialogHeader>
         <div>
