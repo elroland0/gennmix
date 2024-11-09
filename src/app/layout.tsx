@@ -3,11 +3,9 @@ import { Inter } from "next/font/google";
 import "./globals.css";
 import { Toaster } from "@/components/ui/toaster";
 import { ImageProvider } from "@/contexts/image-context";
-import { ImageList } from "@/components/common/image-list";
-import { Suspense } from "react";
 import { TooltipProvider } from "@/components/ui/tooltip";
-import { Header } from "@/components/common/header";
 import { CSPostHogProvider } from "./providers";
+import { cn } from "@/lib/utils";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -26,7 +24,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={inter.className}>
+      <body className={cn(inter.className, "overflow-hidden")}>
         <CSPostHogProvider>
           <TooltipProvider>
             <ImageProvider>{children}</ImageProvider>
