@@ -95,9 +95,13 @@ export function BlackForestLabsGenerate() {
 
       if (!res.ok) {
         const error = (await res.json()) as {
-          detail: { msg: string }[];
+          detail: { msg: string }[] | string;
         };
-        throw new Error(error.detail.map((d) => d.msg).join("\n"));
+        throw new Error(
+          typeof error.detail === "string"
+            ? error.detail
+            : error.detail.map((d) => d.msg).join("\n")
+        );
       }
 
       const task = (await res.json()) as { id: string };
@@ -105,6 +109,8 @@ export function BlackForestLabsGenerate() {
       // Poll for result
       let image;
       while (true) {
+        await new Promise((resolve) => setTimeout(resolve, 1000));
+
         const result = await fetch(
           `https://api.bfl.ml/v1/get_result?id=${task.id}`
         );
@@ -141,8 +147,7 @@ export function BlackForestLabsGenerate() {
           break;
         }
 
-        // Wait 2 seconds before next poll
-        await new Promise((resolve) => setTimeout(resolve, 2000));
+        await new Promise((resolve) => setTimeout(resolve, 1000));
       }
 
       if (image.status === "Ready") {
