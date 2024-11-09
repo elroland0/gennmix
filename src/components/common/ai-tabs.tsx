@@ -6,7 +6,7 @@ import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 export function AiTabs({ ai }: { ai: string }) {
   return (
     <Tabs value={ai}>
-      <TabsList>
+      <TabsList className="text-neutral-700">
         <TabsTrigger value="openai">
           <Link href="/openai">OpenAI</Link>
         </TabsTrigger>

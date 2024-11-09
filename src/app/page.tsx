@@ -3,6 +3,7 @@ import pictures from "../../public/pictures.svg";
 import pictures2 from "../../public/pictures2.svg";
 import Image from "next/image";
 import { Header } from "@/components/common/header";
+import ShineBorder from "@/components/ui/shine-border";
 
 export default function Home() {
   return (
@@ -24,7 +25,9 @@ export default function Home() {
           <p className="text-neutral-500 mb-8">
             Generate images using various AI services with your API keys
           </p>
-          <AiTabs ai="" />
+          <ShineBorder className="p-0 min-h-0" duration={20}>
+            <AiTabs ai="" />
+          </ShineBorder>
         </div>
         <div className="flex-1 flex justify-center">
           <Image
