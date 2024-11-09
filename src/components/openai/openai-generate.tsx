@@ -17,23 +17,21 @@ const schema = z
       .discriminatedUnion("model", [
         z.object({
           model: z.literal("dall-e-3-standard"),
-          size: z.enum(sizes["dall-e-3-standard"]),
-          style: z.enum(styles),
+          size: z.enum(sizes["dall-e-3-standard"]).default("1024x1024"),
+          style: z.enum(styles).default("vivid"),
         }),
         z.object({
           model: z.literal("dall-e-3-hd"),
-          size: z.enum(sizes["dall-e-3-hd"]),
-          style: z.enum(styles),
+          size: z.enum(sizes["dall-e-3-hd"]).default("1024x1024"),
+          style: z.enum(styles).default("vivid"),
         }),
         z.object({
           model: z.literal("dall-e-2"),
-          size: z.enum(sizes["dall-e-2"]),
+          size: z.enum(sizes["dall-e-2"]).default("1024x1024"),
         }),
       ])
       .default({
         model: "dall-e-3-standard",
-        size: "1024x1024",
-        style: "vivid",
       })
   );
 

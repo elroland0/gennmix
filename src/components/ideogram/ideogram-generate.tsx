@@ -17,34 +17,38 @@ import { generateIdeogram } from "./ideogram-server-actions";
 
 const schema = z
   .object({
-    prompt: z.string().min(1).describe("textarea"),
+    prompt: z.string().min(1).describe("textarea").default(""),
     magicPromptOption: z.enum(magic_prompt_options).default("AUTO"),
-    nagativePrompt: z.string().optional(),
-    seed: z.number().optional(),
+    nagativePrompt: z.string().min(1).optional(),
+    seed: z.number().int().min(0).default(0),
   })
   .and(
     z
       .discriminatedUnion("model", [
         z.object({
           model: z.literal("V_2"),
-          size: z.enum([...aspect_ratios, ...resolutions]),
+          size: z
+            .enum([...aspect_ratios, ...resolutions])
+            .default("ASPECT_1_1"),
           style: z.enum(style_types).default("AUTO"),
         }),
         z.object({
           model: z.literal("V_2_TURBO"),
-          size: z.enum([...aspect_ratios, ...resolutions]),
+          size: z
+            .enum([...aspect_ratios, ...resolutions])
+            .default("ASPECT_1_1"),
           style: z.enum(style_types).default("AUTO"),
         }),
         z.object({
           model: z.literal("V_1"),
-          size: z.enum(aspect_ratios),
+          size: z.enum(aspect_ratios).default("ASPECT_1_1"),
         }),
         z.object({
           model: z.literal("V_1_TURBO"),
-          size: z.enum(aspect_ratios),
+          size: z.enum(aspect_ratios).default("ASPECT_1_1"),
         }),
       ])
-      .default({ model: "V_2", size: "ASPECT_1_1", style: "AUTO" })
+      .default({ model: "V_2" })
   )
   .and(
     z
@@ -54,11 +58,10 @@ const schema = z
         }),
         z.object({
           colorPaletteType: z.literal("name"),
-          colorPalette: z.enum(color_palette_names),
+          colorPalette: z.enum(color_palette_names).default("MAGIC"),
         }),
         z.object({
           colorPaletteType: z.literal("members"),
-          // colorPalette: z.array(z.object({ color_hex: z.string() })),
         }),
       ])
       .default({ colorPaletteType: "none" })
