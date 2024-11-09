@@ -7,11 +7,15 @@ import { useSearchParams } from "next/navigation";
 import { ImageViewer } from "@/components/common/image-viewer";
 import { useRef } from "react";
 import { Button } from "../ui/button";
-import { ChevronLeftIcon, ChevronRightIcon } from "@radix-ui/react-icons";
+import {
+  ChevronLeftIcon,
+  ChevronRightIcon,
+  TrashIcon,
+} from "@radix-ui/react-icons";
 
 export function ImageList() {
   const listRef = useRef<HTMLDivElement>(null);
-  const { images } = useImages();
+  const { images, removeImage } = useImages();
   const searchParams = useSearchParams();
   const imageId = searchParams.get("image");
 
@@ -35,25 +39,15 @@ export function ImageList() {
         >
           <ChevronLeftIcon className="w-4 h-4" />
         </Button>
+
         <div ref={listRef} className="flex-1 overflow-x-auto no-scrollbar px-4">
           <div className="space-x-4 flex items-center min-w-max">
-            {images.map(({ id, url }, index) => (
-              <Link
-                key={id}
-                href={`?image=${id}`}
-                className="w-24 h-24 relative"
-              >
-                <Image
-                  src={url}
-                  alt={`Generated image ${index + 1}`}
-                  className="object-contain rounded-lg overflow-hidden"
-                  fill
-                  unoptimized
-                />
-              </Link>
+            {images.map((image) => (
+              <ImageItem key={image.id} image={image} onRemove={removeImage} />
             ))}
           </div>
         </div>
+
         <Button
           variant="ghost"
           className="h-24 w-24"
@@ -73,5 +67,35 @@ export function ImageList() {
         <ImageViewer image={images.find(({ id }) => id === imageId)!} />
       )}
     </>
+  );
+}
+
+function ImageItem({
+  image,
+  onRemove,
+}: {
+  image: { id: string; url: string };
+  onRemove: (id: string) => void;
+}) {
+  return (
+    <div className="group relative w-24 h-24">
+      <Link href={`?image=${image.id}`} className="absolute inset-0">
+        <Image
+          src={image.url}
+          alt="Generated image"
+          className="object-contain rounded-lg overflow-hidden"
+          loading="lazy"
+          fill
+          unoptimized
+        />
+      </Link>
+      <Button
+        variant="ghost"
+        className="absolute top-0 right-0 bg-red-400 text-neutral-50 transition-opacity duration-300 ease-in-out opacity-0 group-hover:opacity-100 hover:bg-red-500 hover:text-neutral-100 p-0 w-6 h-6 rounded-md"
+        onClick={() => onRemove(image.id)}
+      >
+        <TrashIcon className="w-4 h-4" />
+      </Button>
+    </div>
   );
 }

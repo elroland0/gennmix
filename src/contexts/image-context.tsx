@@ -38,7 +38,7 @@ type ImageContextType = {
   addImage: (
     data: ImageGenerateInput | ImageVectorizeInput | ImageRemoveBackgroundInput
   ) => { id: string };
-  clearImages: () => void;
+  removeImage: (id: string) => void;
 };
 
 const ImageContext = createContext<ImageContextType | undefined>(undefined);
@@ -71,13 +71,14 @@ export function ImageProvider({ children }: { children: React.ReactNode }) {
     return { id };
   };
 
-  const clearImages = () => {
-    setImages([]);
-    localStorage.removeItem("images");
+  const removeImage = (id: string) => {
+    const newImages = images.filter((image) => image.id !== id);
+    setImages(newImages);
+    localStorage.setItem("images", JSON.stringify(newImages));
   };
 
   return (
-    <ImageContext.Provider value={{ images, addImage, clearImages }}>
+    <ImageContext.Provider value={{ images, addImage, removeImage }}>
       {children}
     </ImageContext.Provider>
   );
