@@ -2,8 +2,9 @@
 
 import { createContext, useContext, useEffect, useState } from "react";
 
-type Ai = "openai" | "recraft" | "ideogram";
+export type Ai = "openai" | "recraft" | "ideogram" | "black-forest-labs";
 type ImageGenerateInput = {
+  id?: string;
   type?: "generate";
   ai: Ai;
   model: string;
@@ -13,12 +14,14 @@ type ImageGenerateInput = {
   expiresAt: number;
 };
 type ImageVectorizeInput = {
+  id?: string;
   type: "vectorize";
   ai: Ai;
   url: string;
   expiresAt: number;
 };
 type ImageRemoveBackgroundInput = {
+  id?: string;
   type: "remove-background";
   ai: "recraft";
   url: string;
@@ -60,7 +63,7 @@ export function ImageProvider({ children }: { children: React.ReactNode }) {
   const addImage = (
     data: ImageGenerateInput | ImageVectorizeInput | ImageRemoveBackgroundInput
   ) => {
-    const id = crypto.randomUUID();
+    const id = data.id ?? crypto.randomUUID();
     const newImage = { ...data, id } as Image;
     const newImages = [newImage, ...images];
     localStorage.setItem("images", JSON.stringify(newImages));

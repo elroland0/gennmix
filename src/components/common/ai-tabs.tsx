@@ -16,6 +16,9 @@ export function AiTabs({ ai }: { ai: string }) {
         <TabsTrigger value="ideogram">
           <Link href="/ideogram">Ideogram</Link>
         </TabsTrigger>
+        <TabsTrigger value="black-forest-labs">
+          <Link href="/black-forest-labs">Black Forest Labs</Link>
+        </TabsTrigger>
       </TabsList>
     </Tabs>
   );
