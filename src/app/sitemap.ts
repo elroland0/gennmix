@@ -12,19 +12,25 @@ export default function sitemap(): MetadataRoute.Sitemap {
       url: "https://gennmix.com/openai",
       lastModified: new Date(),
       changeFrequency: "weekly",
-      priority: 0.8,
+      priority: 1,
     },
     {
       url: "https://gennmix.com/recraft",
       lastModified: new Date(),
       changeFrequency: "weekly",
-      priority: 0.8,
+      priority: 1,
     },
     {
       url: "https://gennmix.com/ideogram",
       lastModified: new Date(),
       changeFrequency: "weekly",
-      priority: 0.8,
+      priority: 1,
+    },
+    {
+      url: "https://gennmix.com/black-forest-labs",
+      lastModified: new Date(),
+      changeFrequency: "weekly",
+      priority: 1,
     },
   ];
 }
