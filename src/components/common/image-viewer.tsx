@@ -152,13 +152,11 @@ export function ImageViewer({ image }: { image: ImageType }) {
               </Tooltip>
             )}
           </div>
-          <DialogDescription>
-            <p className="text-xs mt-2">
-              Please download it to keep a permanent copy.
-            </p>
-            <p className="text-xs mt-1">
+          <DialogDescription className="flex flex-col gap-1 text-xs pt-2">
+            <span>Please download it to keep a permanent copy.</span>
+            <span>
               Expires at: {new Date(image.expiresAt).toLocaleString()}
-            </p>
+            </span>
           </DialogDescription>
         </DialogHeader>
         <div>
