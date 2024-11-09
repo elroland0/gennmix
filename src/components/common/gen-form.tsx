@@ -173,6 +173,14 @@ export function GenForm<T extends z.ZodTypeAny>({
                     field.onChange(Number(e.target.value));
                   }}
                 />
+              ) : schema instanceof z.ZodBoolean ? (
+                <Switch
+                  id={name}
+                  checked={field.value}
+                  onCheckedChange={(checked) => {
+                    field.onChange(checked);
+                  }}
+                />
               ) : schema instanceof z.ZodEnum ? (
                 <Select
                   value={field.value}
