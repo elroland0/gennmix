@@ -17,6 +17,7 @@ import { Badge } from "../ui/badge";
 import { Tooltip, TooltipContent, TooltipTrigger } from "../ui/tooltip";
 import mime from "mime";
 import { Image as ImageType } from "@/contexts/image-context";
+import { cn } from "@/lib/utils";
 
 export function ImageViewer({ image }: { image: ImageType }) {
   const [isDownloading, setIsDownloading] = useState(false);
@@ -26,6 +27,10 @@ export function ImageViewer({ image }: { image: ImageType }) {
   const handleDownload = async () => {
     setIsDownloading(true);
     try {
+      if (image.type === "generate" && image.raw) {
+        window.open(image.url, "_blank");
+        return;
+      }
       let blob: Blob;
       if (
         image.ai === "openai" ||
@@ -168,11 +173,15 @@ export function ImageViewer({ image }: { image: ImageType }) {
               onClick={handleDownload}
               disabled={isDownloading}
             >
-              <DownloadIcon className="w-4 h-4" />
+              <DownloadIcon
+                className={cn("w-4 h-4", isDownloading && "animate-bounce")}
+              />
               Download
             </Button>
             <Button variant="outline" onClick={handleCopy} disabled={isCopying}>
-              <CopyIcon className="w-4 h-4" />
+              <CopyIcon
+                className={cn("w-4 h-4", isCopying && "animate-bounce")}
+              />
               Copy
             </Button>
           </div>

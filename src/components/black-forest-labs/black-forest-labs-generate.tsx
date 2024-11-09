@@ -157,6 +157,7 @@ export function BlackForestLabsGenerate() {
               ? values.aspect_ratio
               : `${values.width}x${values.height}`,
           expiresAt: Date.now() + 1000 * 60 * 10,
+          raw: values.model === "flux-pro-1.1-ultra" ? values.raw : undefined,
         });
         router.push(`?image=${id}`);
       }

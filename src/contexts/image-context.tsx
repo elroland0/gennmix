@@ -12,6 +12,7 @@ type ImageGenerateInput = {
   size: string;
   url: string;
   expiresAt: number;
+  raw?: boolean;
 };
 type ImageVectorizeInput = {
   id?: string;
