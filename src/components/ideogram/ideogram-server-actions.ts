@@ -11,7 +11,7 @@ export const generateIdeogram = async (apiKey: string, body: string) => {
   });
   if (!response.ok) {
     const err = (await response.json()) as { detail: string };
-    throw new Error(err.detail);
+    return { error: err.detail };
   }
   return (await response.json()) as {
     created: string;

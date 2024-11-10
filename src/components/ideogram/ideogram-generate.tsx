@@ -91,12 +91,15 @@ export function IdeogramGenerate() {
               data.model === "V_2" || data.model === "V_2_TURBO"
                 ? data.style
                 : undefined,
-            color_palette: {
-              name:
-                data.colorPaletteType === "name"
-                  ? data.colorPalette
-                  : undefined,
-            },
+            color_palette:
+              data.colorPaletteType !== "none"
+                ? {
+                    name:
+                      data.colorPaletteType === "name"
+                        ? data.colorPalette
+                        : undefined,
+                  }
+                : undefined,
             aspect_ratio: data.size.startsWith("ASPECT")
               ? data.size
               : undefined,
@@ -106,6 +109,10 @@ export function IdeogramGenerate() {
           },
         })
       );
+
+      if ("error" in generated) {
+        throw new Error(generated.error);
+      }
 
       const imageUrl = generated.data[0].url;
       const { id } = addImage({
