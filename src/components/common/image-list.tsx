@@ -83,7 +83,7 @@ function ImageItem({
         <Image
           src={image.url}
           alt="Generated image"
-          className="object-contain rounded-lg overflow-hidden"
+          className="object-contain overflow-hidden"
           loading="lazy"
           fill
           unoptimized
