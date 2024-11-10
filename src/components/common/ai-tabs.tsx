@@ -5,7 +5,7 @@ import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 export function AiTabs({ ai }: { ai: string }) {
   return (
-    <Tabs value={ai}>
+    <Tabs value={ai} className="overflow-auto">
       <TabsList className="text-neutral-700 font-normal gap-1">
         <TabsTrigger
           value="openai"
