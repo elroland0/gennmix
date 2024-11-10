@@ -10,6 +10,7 @@ import {
   FormField,
   FormItem,
   FormLabel,
+  FormMessage,
 } from "../ui/form";
 import { Button } from "../ui/button";
 import { Input } from "../ui/input";
@@ -146,9 +147,10 @@ export function GenForm<T extends z.ZodTypeAny>({
         render={({ field }) => (
           <FormItem>
             <div className="flex items-center gap-2">
-              <FormLabel htmlFor={name}>
+              <FormLabel htmlFor={name} className="text-primary">
                 {name[0].toUpperCase() + name.slice(1)}
               </FormLabel>
+              <FormMessage className="leading-3" />
               {optional && (
                 <FormDescription className="text-xs">optional</FormDescription>
               )}

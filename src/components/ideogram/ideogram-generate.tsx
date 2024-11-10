@@ -17,7 +17,7 @@ import { generateIdeogram } from "./ideogram-server-actions";
 
 const schema = z
   .object({
-    prompt: z.string().min(1).describe("textarea").default(""),
+    prompt: z.string().min(1).describe("textarea"),
     magicPromptOption: z.enum(magic_prompt_options).default("AUTO"),
     nagativePrompt: z.string().min(1).optional(),
     seed: z.number().int().min(0).default(0),
