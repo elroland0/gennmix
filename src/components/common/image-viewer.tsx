@@ -15,59 +15,23 @@ import {
 import { useRouter } from "next/navigation";
 import { Badge } from "../ui/badge";
 import { Tooltip, TooltipContent, TooltipTrigger } from "../ui/tooltip";
-import mime from "mime";
 import { Image as ImageType } from "@/contexts/image-context";
-import { cn } from "@/lib/utils";
 
 export function ImageViewer({ image }: { image: ImageType }) {
-  const [isDownloading, setIsDownloading] = useState(false);
   const [isCopying, setIsCopying] = useState(false);
   const router = useRouter();
 
   const handleDownload = async () => {
-    setIsDownloading(true);
-    try {
-      if (image.type === "generate" && image.raw) {
-        window.open(image.url, "_blank");
-        return;
-      }
-      let blob: Blob;
-      if (
-        image.ai === "openai" ||
-        image.ai === "ideogram" ||
-        image.ai === "black-forest-labs"
-      ) {
-        const res = await fetch(
-          `/image/download?url=${encodeURIComponent(image.url)}`,
-          {
-            method: "POST",
-          }
-        );
-        blob = await res.blob();
-      } else if (image.ai === "recraft") {
-        const res = await fetch(image.url);
-        blob = await res.blob();
-      } else {
-        throw new Error("Invalid AI type");
-      }
-
-      const downloadUrl = URL.createObjectURL(blob);
-      const a = document.createElement("a");
-      a.href = downloadUrl;
-      const format = mime.getExtension(blob.type);
-      a.download = `generated-image.${format}`;
-      document.body.appendChild(a);
-      a.click();
-      document.body.removeChild(a);
-    } catch (error) {
-      toast({
-        title: "Download failed",
-        description: "Failed to download the image. Please try again.",
-        variant: "destructive",
-      });
-    } finally {
-      setIsDownloading(false);
+    if (image.type === "generate" && image.raw) {
+      window.open(image.url, "_blank");
+      return;
     }
+    var link = document.createElement("a");
+    link.setAttribute("download", "");
+    link.href = `/image/download?url=${encodeURIComponent(image.url)}`;
+    document.body.appendChild(link);
+    link.click();
+    link.remove();
   };
 
   const handleCopy = async () => {
@@ -80,10 +44,7 @@ export function ImageViewer({ image }: { image: ImageType }) {
         image.ai === "black-forest-labs"
       ) {
         const response = await fetch(
-          `/image/download?url=${encodeURIComponent(image.url)}`,
-          {
-            method: "POST",
-          }
+          `/image/download?url=${encodeURIComponent(image.url)}`
         );
         blob = await response.blob();
       } else if (image.ai === "recraft") {
@@ -168,20 +129,12 @@ export function ImageViewer({ image }: { image: ImageType }) {
         </DialogHeader>
         <div>
           <div className="flex gap-2">
-            <Button
-              variant="outline"
-              onClick={handleDownload}
-              disabled={isDownloading}
-            >
-              <DownloadIcon
-                className={cn("w-4 h-4", isDownloading && "animate-bounce")}
-              />
+            <Button variant="outline" onClick={handleDownload}>
+              <DownloadIcon className="w-4 h-4" />
               Download
             </Button>
             <Button variant="outline" onClick={handleCopy} disabled={isCopying}>
-              <CopyIcon
-                className={cn("w-4 h-4", isCopying && "animate-bounce")}
-              />
+              <CopyIcon className="w-4 h-4" />
               Copy
             </Button>
           </div>
