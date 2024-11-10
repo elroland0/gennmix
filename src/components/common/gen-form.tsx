@@ -254,8 +254,6 @@ export function GenForm<T extends z.ZodTypeAny>({
               onSubmit(data as z.infer<T> & { apiKey: string });
             })}
           >
-            {generateField(schema, {})}
-
             <FormField
               key="apiKey"
               control={form.control}
@@ -264,7 +262,18 @@ export function GenForm<T extends z.ZodTypeAny>({
               render={({ field }) => (
                 <FormItem>
                   <div className="flex items-center justify-between">
-                    <FormLabel>API Key</FormLabel>
+                    <FormLabel>
+                      {ai === "openai"
+                        ? "OpenAI"
+                        : ai === "ideogram"
+                        ? "Ideogram"
+                        : ai === "recraft"
+                        ? "Recraft"
+                        : ai === "black-forest-labs"
+                        ? "Black Forest Labs"
+                        : null}{" "}
+                      API Key
+                    </FormLabel>
                     <div className="flex items-center gap-2">
                       <span className="text-xs text-muted-foreground">
                         remember
@@ -294,6 +303,8 @@ export function GenForm<T extends z.ZodTypeAny>({
                 </FormItem>
               )}
             />
+
+            {generateField(schema, {})}
 
             <div className="flex justify-center">
               <Button
