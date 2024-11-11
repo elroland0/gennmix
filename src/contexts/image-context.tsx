@@ -49,7 +49,7 @@ export function ImageProvider({ children }: { children: React.ReactNode }) {
 
   useEffect(() => {
     const storedImages = Object.keys(localStorage).filter((key) =>
-      key.startsWith("gennmix-")
+      key.startsWith("img-")
     );
 
     const parsedImages = storedImages.map((key) =>
@@ -59,7 +59,7 @@ export function ImageProvider({ children }: { children: React.ReactNode }) {
     const filteredImages = parsedImages.filter((image) => {
       const expired = image.expiresAt < Date.now();
       if (expired) {
-        localStorage.removeItem(`gennmix-${image.id}`);
+        localStorage.removeItem(`img-${image.id}`);
       }
       return !expired;
     });
@@ -72,7 +72,7 @@ export function ImageProvider({ children }: { children: React.ReactNode }) {
   ) => {
     const id = data.id ?? crypto.randomUUID();
     const newImage = { ...data, id } as Image;
-    localStorage.setItem(`gennmix-${id}`, JSON.stringify(newImage));
+    localStorage.setItem(`img-${id}`, JSON.stringify(newImage));
     setImages([newImage, ...images]);
     return { id };
   };
@@ -80,7 +80,7 @@ export function ImageProvider({ children }: { children: React.ReactNode }) {
   const removeImage = (id: string) => {
     const newImages = images.filter((image) => image.id !== id);
     setImages(newImages);
-    localStorage.removeItem(`gennmix-${id}`);
+    localStorage.removeItem(`img-${id}`);
   };
 
   return (
