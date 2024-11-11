@@ -5,7 +5,7 @@ import { createContext, useContext, useEffect, useState } from "react";
 export type Ai = "openai" | "recraft" | "ideogram" | "black-forest-labs";
 type ImageGenerateInput = {
   id?: string;
-  type?: "generate";
+  type: "generate";
   ai: Ai;
   model: string;
   prompt: string;
@@ -48,17 +48,23 @@ export function ImageProvider({ children }: { children: React.ReactNode }) {
   const [images, setImages] = useState<Image[]>([]);
 
   useEffect(() => {
-    const storedImages = localStorage.getItem("images");
-    if (storedImages) {
-      const parsedImages = JSON.parse(storedImages) as Image[];
-      const filteredImages = parsedImages.filter(
-        (image) => image.expiresAt > Date.now()
-      );
-      setImages(filteredImages);
-      localStorage.setItem("images", JSON.stringify(filteredImages));
-    } else {
-      setImages([]);
-    }
+    const storedImages = Object.keys(localStorage).filter((key) =>
+      key.startsWith("gennmix-")
+    );
+
+    const parsedImages = storedImages.map((key) =>
+      JSON.parse(localStorage.getItem(key)!)
+    ) as Image[];
+
+    const filteredImages = parsedImages.filter((image) => {
+      const expired = image.expiresAt < Date.now();
+      if (expired) {
+        localStorage.removeItem(`gennmix-${image.id}`);
+      }
+      return !expired;
+    });
+
+    setImages(filteredImages);
   }, []);
 
   const addImage = (
@@ -66,16 +72,15 @@ export function ImageProvider({ children }: { children: React.ReactNode }) {
   ) => {
     const id = data.id ?? crypto.randomUUID();
     const newImage = { ...data, id } as Image;
-    const newImages = [newImage, ...images];
-    localStorage.setItem("images", JSON.stringify(newImages));
-    setImages(newImages);
+    localStorage.setItem(`gennmix-${id}`, JSON.stringify(newImage));
+    setImages([newImage, ...images]);
     return { id };
   };
 
   const removeImage = (id: string) => {
     const newImages = images.filter((image) => image.id !== id);
     setImages(newImages);
-    localStorage.setItem("images", JSON.stringify(newImages));
+    localStorage.removeItem(`gennmix-${id}`);
   };
 
   return (

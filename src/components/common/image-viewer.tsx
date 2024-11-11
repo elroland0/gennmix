@@ -98,13 +98,13 @@ export function ImageViewer({ image }: { image: ImageType }) {
           </DialogTitle>
           <div className="flex items-center gap-2 pt-2">
             <Badge>{image.type || "generate"}</Badge>
-            {(!image.type || image.type === "generate") && (
+            {image.type === "generate" && (
               <Badge variant="outline">{image.model}</Badge>
             )}
-            {(!image.type || image.type === "generate") && (
+            {image.type === "generate" && (
               <Badge variant="outline">{image.size}</Badge>
             )}
-            {(!image.type || image.type === "generate") && (
+            {image.type === "generate" && (
               <Tooltip defaultOpen={false}>
                 <TooltipTrigger>
                   <Badge variant="outline" className="flex items-center">
