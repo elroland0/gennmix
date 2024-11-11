@@ -19,36 +19,31 @@ const schema = z
   .object({
     prompt: z.string().min(1).describe("textarea"),
     magicPromptOption: z.enum(magic_prompt_options).default("AUTO"),
-    nagativePrompt: z.string().min(1).optional(),
-    seed: z.number().int().min(0).default(0),
+    nagativePrompt: z.string().min(1).describe("textarea").optional(),
   })
   .and(
     z
       .discriminatedUnion("model", [
         z.object({
           model: z.literal("V_2"),
-          size: z
-            .enum([...aspect_ratios, ...resolutions])
-            .default("ASPECT_1_1"),
-          style: z.enum(style_types).default("AUTO"),
+          size: z.enum([...aspect_ratios, ...resolutions]),
+          style: z.enum(style_types),
         }),
         z.object({
           model: z.literal("V_2_TURBO"),
-          size: z
-            .enum([...aspect_ratios, ...resolutions])
-            .default("ASPECT_1_1"),
-          style: z.enum(style_types).default("AUTO"),
+          size: z.enum([...aspect_ratios, ...resolutions]),
+          style: z.enum(style_types),
         }),
         z.object({
           model: z.literal("V_1"),
-          size: z.enum(aspect_ratios).default("ASPECT_1_1"),
+          size: z.enum(aspect_ratios),
         }),
         z.object({
           model: z.literal("V_1_TURBO"),
-          size: z.enum(aspect_ratios).default("ASPECT_1_1"),
+          size: z.enum(aspect_ratios),
         }),
       ])
-      .default({ model: "V_2" })
+      .default({ model: "V_2", size: "ASPECT_1_1", style: "AUTO" })
   )
   .and(
     z
@@ -58,13 +53,18 @@ const schema = z
         }),
         z.object({
           colorPaletteType: z.literal("name"),
-          colorPalette: z.enum(color_palette_names).default("MAGIC"),
+          colorPalette: z.enum(color_palette_names),
         }),
         z.object({
           colorPaletteType: z.literal("members"),
         }),
       ])
       .default({ colorPaletteType: "none" })
+  )
+  .and(
+    z.object({
+      seed: z.number().int().optional(),
+    })
   );
 
 export function IdeogramGenerate() {

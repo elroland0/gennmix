@@ -8,7 +8,7 @@ import { useState } from "react";
 import { toast } from "@/hooks/use-toast";
 
 const schema = z.object({
-  image: z.instanceof(File),
+  image: z.instanceof(File).describe("image"),
 });
 
 export function RecraftRemoveBackground() {

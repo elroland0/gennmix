@@ -35,6 +35,7 @@ import { InfoCircledIcon } from "@radix-ui/react-icons";
 import { Switch } from "../ui/switch";
 import { ColorPickers } from "../blocks/color-pickers";
 import { Ai } from "@/contexts/image-context";
+import { Slider } from "../ui/slider";
 
 export function GenForm<T extends z.ZodTypeAny>({
   ai,
@@ -134,6 +135,15 @@ export function GenForm<T extends z.ZodTypeAny>({
           ),
       ];
     }
+    if (schema instanceof z.ZodEffects) {
+      if (schema._def.description !== "image") {
+        return generateField(schema._def.schema, {
+          name,
+          optional,
+          discriminatorValue,
+        });
+      }
+    }
 
     if (!name) return null;
 
@@ -167,14 +177,36 @@ export function GenForm<T extends z.ZodTypeAny>({
                   />
                 )
               ) : schema instanceof z.ZodNumber ? (
-                <Input
-                  id={name}
-                  type="number"
-                  {...field}
-                  onChange={(e) => {
-                    field.onChange(Number(e.target.value));
-                  }}
-                />
+                schema.description?.includes("range") ? (
+                  <div className="flex items-center gap-2">
+                    <Input
+                      id={name}
+                      type="number"
+                      className="w-24"
+                      value={field.value}
+                      onChange={(e) => field.onChange(Number(e.target.value))}
+                      max={schema.maxValue ?? undefined}
+                      min={schema.minValue ?? undefined}
+                      step={Number(schema.description?.split(",")[1])}
+                    />
+                    <Slider
+                      value={[field.value]}
+                      onValueChange={(e) => field.onChange(Number(e[0]))}
+                      min={schema.minValue ?? undefined}
+                      max={schema.maxValue ?? undefined}
+                      step={Number(schema.description?.split(",")[1])}
+                    />
+                  </div>
+                ) : (
+                  <Input
+                    id={name}
+                    type="number"
+                    value={field.value}
+                    onChange={(e) => {
+                      field.onChange(Number(e.target.value));
+                    }}
+                  />
+                )
               ) : schema instanceof z.ZodBoolean ? (
                 <Switch
                   id={name}
@@ -287,7 +319,7 @@ export function GenForm<T extends z.ZodTypeAny>({
                         }}
                       />
                       <TooltipProvider>
-                        <Tooltip>
+                        <Tooltip delayDuration={0}>
                           <TooltipTrigger asChild>
                             <InfoCircledIcon className="w-4 h-4 text-muted-foreground cursor-pointer" />
                           </TooltipTrigger>
@@ -350,13 +382,14 @@ function getDefaults<Schema extends z.ZodTypeAny>(
     );
   }
   if (schema instanceof z.ZodDefault) {
-    if (schema._def.innerType instanceof z.ZodDiscriminatedUnion) {
-      const discriminator = schema._def.innerType._def.discriminator;
-      const discriminatorValue = schema._def.defaultValue()[discriminator];
-      return getDefaults(
-        schema._def.innerType._def.optionsMap.get(discriminatorValue)
-      );
-    }
+    return schema._def.defaultValue();
+    // if (schema._def.innerType instanceof z.ZodDiscriminatedUnion) {
+    //   const discriminator = schema._def.innerType._def.discriminator;
+    //   const discriminatorValue = schema._def.defaultValue()[discriminator];
+    //   return getDefaults(
+    //     schema._def.innerType._def.optionsMap.get(discriminatorValue)
+    //   );
+    // }
   }
   return undefined;
 }
