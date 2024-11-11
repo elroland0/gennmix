@@ -160,7 +160,8 @@ export function BlackForestLabsGenerate() {
       if (image.status === "Ready") {
         const { id } = addImage({
           id: image.id,
-          ai: "black-forest-labs",
+          type: "generate",
+          provider: "black-forest-labs",
           model: values.model,
           url: image.result.sample,
           prompt: values.prompt,
@@ -191,7 +192,7 @@ export function BlackForestLabsGenerate() {
   };
   return (
     <GenForm
-      ai="black-forest-labs"
+      provider="black-forest-labs"
       title="Generate Image"
       submitText="Generate"
       schema={schema}

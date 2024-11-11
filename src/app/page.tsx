@@ -1,4 +1,4 @@
-import { AiTabs } from "@/components/common/ai-tabs";
+import { ProviderTabs } from "@/components/common/provider-tabs";
 import pictures from "../../public/pictures.svg";
 import pictures2 from "../../public/pictures2.svg";
 import Image from "next/image";
@@ -26,7 +26,7 @@ export default function Home() {
             Generate images using various AI services with your API keys
           </p>
           <ShineBorder className="p-0 min-h-0" duration={20}>
-            <AiTabs ai="" />
+            <ProviderTabs provider="" />
           </ShineBorder>
         </div>
         <div className="flex-1 flex justify-center">

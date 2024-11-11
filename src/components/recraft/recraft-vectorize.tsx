@@ -44,7 +44,7 @@ export function RecraftVectorize() {
       const { image } = (await res.json()) as { image: { url: string } };
       const { id } = addImage({
         type: "vectorize",
-        ai: "recraft",
+        provider: "recraft",
         url: image.url,
         expiresAt: Date.now() + 1000 * 60 * 60 * 24 * 10000,
       });
@@ -64,7 +64,7 @@ export function RecraftVectorize() {
   return (
     <GenForm
       title="Recraft Image Vectorize"
-      ai="recraft"
+      provider="recraft"
       schema={schema}
       submitText="Vectorize"
       isSubmitting={isSubmitting}

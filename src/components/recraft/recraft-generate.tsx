@@ -75,7 +75,7 @@ export function RecraftGenerate() {
       const imageUrl = imageData.data[0].url;
       const { id } = addImage({
         type: "generate",
-        ai: "recraft",
+        provider: "recraft",
         model: data.model,
         prompt: data.prompt,
         size: data.size,
@@ -98,7 +98,7 @@ export function RecraftGenerate() {
 
   return (
     <GenForm
-      ai="recraft"
+      provider="recraft"
       title="Recraft Image Generator"
       submitText="Generate"
       schema={schema}

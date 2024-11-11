@@ -2,11 +2,11 @@
 
 import { createContext, useContext, useEffect, useState } from "react";
 
-export type Ai = "openai" | "recraft" | "ideogram" | "black-forest-labs";
+export type Provider = "openai" | "recraft" | "ideogram" | "black-forest-labs";
 type ImageGenerateInput = {
   id?: string;
   type: "generate";
-  ai: Ai;
+  provider: Provider;
   model: string;
   prompt: string;
   size: string;
@@ -17,14 +17,14 @@ type ImageGenerateInput = {
 type ImageVectorizeInput = {
   id?: string;
   type: "vectorize";
-  ai: Ai;
+  provider: Provider;
   url: string;
   expiresAt: number;
 };
 type ImageRemoveBackgroundInput = {
   id?: string;
   type: "remove-background";
-  ai: "recraft";
+  provider: "recraft";
   url: string;
   expiresAt: number;
 };

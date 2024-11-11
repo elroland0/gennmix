@@ -39,15 +39,15 @@ export function ImageViewer({ image }: { image: ImageType }) {
     try {
       let blob: Blob;
       if (
-        image.ai === "openai" ||
-        image.ai === "ideogram" ||
-        image.ai === "black-forest-labs"
+        image.provider === "openai" ||
+        image.provider === "ideogram" ||
+        image.provider === "black-forest-labs"
       ) {
         const response = await fetch(
           `/image/download?url=${encodeURIComponent(image.url)}`
         );
         blob = await response.blob();
-      } else if (image.ai === "recraft") {
+      } else if (image.provider === "recraft") {
         const response = await fetch(image.url);
         blob = await response.blob();
       } else {
@@ -88,11 +88,11 @@ export function ImageViewer({ image }: { image: ImageType }) {
       <DialogContent>
         <DialogHeader>
           <DialogTitle>
-            {image.ai === "openai"
+            {image.provider === "openai"
               ? "OpenAI Image"
-              : image.ai === "recraft"
+              : image.provider === "recraft"
               ? "Recraft Image"
-              : image.ai === "ideogram"
+              : image.provider === "ideogram"
               ? "Ideogram Image"
               : "Black Forest Labs Image"}
           </DialogTitle>
@@ -120,7 +120,7 @@ export function ImageViewer({ image }: { image: ImageType }) {
           </div>
           <DialogDescription className="flex flex-col gap-1 text-xs pt-2">
             <span>Please download it to keep a permanent copy.</span>
-            {image.ai !== "recraft" && (
+            {image.provider !== "recraft" && (
               <span>
                 Expires at: {new Date(image.expiresAt).toLocaleString()}
               </span>

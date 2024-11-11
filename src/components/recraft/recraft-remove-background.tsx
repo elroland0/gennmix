@@ -44,7 +44,7 @@ export function RecraftRemoveBackground() {
       const { id } = addImage({
         type: "remove-background",
         url: image.url,
-        ai: "recraft",
+        provider: "recraft",
         expiresAt: Date.now() + 1000 * 60 * 60 * 24 * 10000,
       });
       router.push(`?image=${id}`);
@@ -62,7 +62,7 @@ export function RecraftRemoveBackground() {
   };
   return (
     <GenForm
-      ai="recraft"
+      provider="recraft"
       title="Remove Background"
       schema={schema}
       submitText="Remove Background"

@@ -117,7 +117,7 @@ export function IdeogramGenerate() {
       const imageUrl = generated.data[0].url;
       const { id } = addImage({
         type: "generate",
-        ai: "ideogram",
+        provider: "ideogram",
         model: data.model,
         prompt: data.prompt,
         size: data.size,
@@ -139,7 +139,7 @@ export function IdeogramGenerate() {
   };
   return (
     <GenForm
-      ai="ideogram"
+      provider="ideogram"
       title="Ideogram Image Generator"
       schema={schema}
       submitText="Generate"

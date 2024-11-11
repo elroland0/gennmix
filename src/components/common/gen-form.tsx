@@ -34,18 +34,18 @@ import {
 import { InfoCircledIcon } from "@radix-ui/react-icons";
 import { Switch } from "../ui/switch";
 import { ColorPickers } from "../blocks/color-pickers";
-import { Ai } from "@/contexts/image-context";
+import { Provider } from "@/contexts/image-context";
 import { Slider } from "../ui/slider";
 
 export function GenForm<T extends z.ZodTypeAny>({
-  ai,
+  provider,
   title,
   schema,
   submitText,
   isSubmitting,
   onSubmit,
 }: {
-  ai: Ai;
+  provider: Provider;
   title: string;
   schema: T;
   submitText: string;
@@ -262,13 +262,13 @@ export function GenForm<T extends z.ZodTypeAny>({
   }
 
   useEffect(() => {
-    const apiKey = localStorage.getItem(`${ai}-api-key`);
+    const apiKey = localStorage.getItem(`${provider}-api-key`);
     if (apiKey) {
       setRememberApiKey(true);
       // @ts-expect-error
       form.setValue("apiKey", apiKey);
     }
-  }, [rememberApiKey]);
+  }, [rememberApiKey, provider]);
 
   return (
     <Card className="w-full border-none shadow-none">
@@ -281,9 +281,9 @@ export function GenForm<T extends z.ZodTypeAny>({
             className="space-y-6"
             onSubmit={form.handleSubmit((data) => {
               if (!rememberApiKey) {
-                localStorage.removeItem(`${ai}-api-key`);
+                localStorage.removeItem(`${provider}-api-key`);
               } else {
-                localStorage.setItem(`${ai}-api-key`, data.apiKey);
+                localStorage.setItem(`${provider}-api-key`, data.apiKey);
               }
               onSubmit(data as z.infer<T> & { apiKey: string });
             })}
@@ -297,13 +297,13 @@ export function GenForm<T extends z.ZodTypeAny>({
                 <FormItem>
                   <div className="flex items-center justify-between">
                     <FormLabel>
-                      {ai === "openai"
+                      {provider === "openai"
                         ? "OpenAI"
-                        : ai === "ideogram"
+                        : provider === "ideogram"
                         ? "Ideogram"
-                        : ai === "recraft"
+                        : provider === "recraft"
                         ? "Recraft"
-                        : ai === "black-forest-labs"
+                        : provider === "black-forest-labs"
                         ? "Black Forest Labs"
                         : null}{" "}
                       API Key

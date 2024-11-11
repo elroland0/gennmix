@@ -3,11 +3,11 @@
 import Link from "next/link";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
-export function AiTabs({ ai }: { ai: string }) {
+export function ProviderTabs({ provider }: { provider: string }) {
   const style =
     "hover:bg-neutral-900 hover:text-neutral-50 data-[state=active]:bg-neutral-900 data-[state=active]:text-neutral-50";
   return (
-    <Tabs value={ai} className="overflow-auto w-full">
+    <Tabs value={provider} className="overflow-auto w-full">
       <TabsList className="text-neutral-700 font-normal gap-1">
         <TabsTrigger value="openai" className={style}>
           <Link href="/openai">OpenAI</Link>

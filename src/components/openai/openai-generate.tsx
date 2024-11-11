@@ -79,7 +79,7 @@ export function OpenAiGenerate() {
       const imageUrl = imageData.data[0].url;
       const { id } = addImage({
         type: "generate",
-        ai: "openai",
+        provider: "openai",
         model: data.model,
         prompt: data.prompt,
         size: data.size,
@@ -102,7 +102,7 @@ export function OpenAiGenerate() {
 
   return (
     <GenForm
-      ai="openai"
+      provider="openai"
       title="OpenAI DALL-E"
       schema={schema}
       submitText="Generate"
