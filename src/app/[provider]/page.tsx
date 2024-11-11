@@ -6,23 +6,23 @@ import { Recraft } from "@/components/recraft/recraft";
 import { Replicate } from "@/components/replicate/replicate";
 import { redirect } from "next/navigation";
 
-export default function AiPage({ params }: { params: { ai: string } }) {
-  if (params.ai === "openai") {
+export default function AiPage({ params }: { params: { provider: string } }) {
+  if (params.provider === "openai") {
     return <OpenAi />;
   }
-  if (params.ai === "recraft") {
+  if (params.provider === "recraft") {
     return <Recraft />;
   }
-  if (params.ai === "ideogram") {
+  if (params.provider === "ideogram") {
     return <Ideogram />;
   }
-  if (params.ai === "black-forest-labs") {
+  if (params.provider === "black-forest-labs") {
     return <BlackForestLabs />;
   }
-  if (params.ai === "replicate") {
+  if (params.provider === "replicate") {
     return <Replicate />;
   }
-  if (params.ai === "fal") {
+  if (params.provider === "fal") {
     return <Fal />;
   }
   return redirect("/");
