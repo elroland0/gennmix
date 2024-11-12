@@ -97,14 +97,14 @@ export function ImageViewer({ image }: { image: ImageType }) {
               : "Black Forest Labs Image"}
           </DialogTitle>
           <div className="flex items-center gap-2 pt-2">
-            <Badge>{image.type || "generate"}</Badge>
-            {image.type === "generate" && (
+            <Badge>{image.type}</Badge>
+            {(image.type === "generate" || image.type === "text-to-image") && (
               <Badge variant="outline">{image.model}</Badge>
             )}
-            {image.type === "generate" && (
+            {(image.type === "generate" || image.type === "text-to-image") && (
               <Badge variant="outline">{image.size}</Badge>
             )}
-            {image.type === "generate" && (
+            {(image.type === "generate" || image.type === "text-to-image") && (
               <Tooltip defaultOpen={false}>
                 <TooltipTrigger>
                   <Badge variant="outline" className="flex items-center">

@@ -10,6 +10,7 @@ import { useState } from "react";
 import { Button } from "../ui/button";
 import { toast } from "@/hooks/use-toast";
 import { Textarea } from "../ui/textarea";
+import { ChevronDownIcon } from "@radix-ui/react-icons";
 
 export function FeedbackPopover() {
   const [open, setOpen] = useState(false);
@@ -46,7 +47,10 @@ export function FeedbackPopover() {
   return (
     <Popover open={open} onOpenChange={setOpen}>
       <PopoverTrigger asChild>
-        <Button variant="outline">Feedback</Button>
+        <Button variant="outline">
+          <ChevronDownIcon className="w-4 h-4" />
+          Feature Request
+        </Button>
       </PopoverTrigger>
       <PopoverContent className="w-96">
         <form action={handleSubmit}>

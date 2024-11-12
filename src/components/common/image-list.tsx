@@ -91,7 +91,7 @@ function ImageItem({
       </Link>
       <Button
         variant="ghost"
-        className="absolute top-0 right-0 bg-red-400 text-neutral-50 transition-opacity duration-300 ease-in-out opacity-0 group-hover:opacity-100 hover:bg-red-500 hover:text-neutral-100 p-0 w-6 h-6 rounded-md"
+        className="absolute top-0 right-0 bg-red-400 text-neutral-50 transition-opacity duration-300 ease-in-out opacity-0 group-hover:opacity-100 hover:bg-red-500 hover:text-neutral-100 p-0 w-6 h-6 rounded-none"
         onClick={() => onRemove(image.id)}
       >
         <TrashIcon className="w-4 h-4" />

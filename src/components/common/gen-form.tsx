@@ -46,7 +46,7 @@ export function GenForm<T extends z.ZodTypeAny>({
   onSubmit,
 }: {
   provider: Provider;
-  title: string;
+  title?: string;
   schema: T;
   submitText: string;
   onSubmit: (values: z.infer<T> & { apiKey: string }) => void;
@@ -224,7 +224,7 @@ export function GenForm<T extends z.ZodTypeAny>({
                       forceUpdate((prev) => prev + 1);
                     }
                   }}
-                  disabled={field.disabled}
+                  disabled={schema.options.length === 1}
                 >
                   <SelectTrigger id={name}>
                     <SelectValue />
@@ -271,10 +271,7 @@ export function GenForm<T extends z.ZodTypeAny>({
   }, [rememberApiKey, provider]);
 
   return (
-    <Card className="w-full border-none shadow-none">
-      <CardHeader className="px-0">
-        <CardTitle>{title}</CardTitle>
-      </CardHeader>
+    <Card className="w-full border-none shadow-none py-4">
       <CardContent className="px-0">
         <Form {...form}>
           <form
@@ -305,6 +302,8 @@ export function GenForm<T extends z.ZodTypeAny>({
                         ? "Recraft"
                         : provider === "black-forest-labs"
                         ? "Black Forest Labs"
+                        : provider === "fal"
+                        ? "Fal"
                         : null}{" "}
                       API Key
                     </FormLabel>
@@ -337,6 +336,12 @@ export function GenForm<T extends z.ZodTypeAny>({
                 </FormItem>
               )}
             />
+
+            {title && (
+              <div className="flex flex-col pt-6">
+                <h3 className="font-semibold">{title}</h3>
+              </div>
+            )}
 
             {generateField(schema, {})}
 

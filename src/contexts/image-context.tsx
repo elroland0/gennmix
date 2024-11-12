@@ -2,10 +2,15 @@
 
 import { createContext, useContext, useEffect, useState } from "react";
 
-export type Provider = "openai" | "recraft" | "ideogram" | "black-forest-labs";
+export type Provider =
+  | "openai"
+  | "recraft"
+  | "ideogram"
+  | "black-forest-labs"
+  | "fal";
 type ImageGenerateInput = {
   id?: string;
-  type: "generate";
+  type: "generate" | "text-to-image";
   provider: Provider;
   model: string;
   prompt: string;

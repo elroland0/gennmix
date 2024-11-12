@@ -6,6 +6,7 @@ import { ImageProvider } from "@/contexts/image-context";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { CSPostHogProvider } from "./providers";
 import { cn } from "@/lib/utils";
+import { Toaster as SonnerToaster } from "@/components/ui/sonner";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -30,6 +31,7 @@ export default function RootLayout({
             <ImageProvider>{children}</ImageProvider>
           </TooltipProvider>
           <Toaster />
+          <SonnerToaster />
         </CSPostHogProvider>
       </body>
     </html>

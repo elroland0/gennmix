@@ -1,5 +1,5 @@
+import { Fal } from "@/_[provider]/fal/fal";
 import { BlackForestLabs } from "@/components/black-forest-labs/black-forest-labs";
-import { Fal } from "@/components/fal/fal";
 import { Ideogram } from "@/components/ideogram/ideogram";
 import { OpenAi } from "@/components/openai/openai";
 import { Recraft } from "@/components/recraft/recraft";
