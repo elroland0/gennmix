@@ -9,6 +9,9 @@ export function ProviderTabs({ provider }: { provider: string }) {
   return (
     <Tabs value={provider} className="overflow-auto w-full">
       <TabsList className="text-neutral-700 font-normal gap-1">
+        <TabsTrigger value="replicate" className={style}>
+          <Link href="/replicate">Replicate</Link>
+        </TabsTrigger>
         <TabsTrigger value="fal" className={style}>
           <Link href="/fal">Fal</Link>
         </TabsTrigger>
@@ -20,9 +23,6 @@ export function ProviderTabs({ provider }: { provider: string }) {
         </TabsTrigger>
         <TabsTrigger value="ideogram" className={style}>
           <Link href="/ideogram">Ideogram</Link>
-        </TabsTrigger>
-        <TabsTrigger value="replicate" className={style}>
-          <Link href="/replicate">Replicate</Link>
         </TabsTrigger>
         <TabsTrigger value="openai" className={style}>
           <Link href="/openai">OpenAI</Link>

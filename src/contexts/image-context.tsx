@@ -7,7 +7,8 @@ export type Provider =
   | "recraft"
   | "ideogram"
   | "black-forest-labs"
-  | "fal";
+  | "fal"
+  | "replicate";
 type ImageGenerateInput = {
   id?: string;
   type: "generate" | "text-to-image";

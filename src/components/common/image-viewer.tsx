@@ -89,14 +89,21 @@ export function ImageViewer({ image }: { image: ImageType }) {
         <DialogHeader>
           <DialogTitle>
             {image.provider === "openai"
-              ? "OpenAI Image"
+              ? "OpenAI"
               : image.provider === "recraft"
-              ? "Recraft Image"
+              ? "Recraft"
               : image.provider === "ideogram"
-              ? "Ideogram Image"
-              : "Black Forest Labs Image"}
+              ? "Ideogram"
+              : image.provider === "black-forest-labs"
+              ? "Black Forest Labs"
+              : image.provider === "fal"
+              ? "Fal"
+              : image.provider === "replicate"
+              ? "Replicate"
+              : null}{" "}
+            Image
           </DialogTitle>
-          <div className="flex items-center gap-2 pt-2">
+          <div className="flex items-center gap-2 pt-2 flex-wrap">
             <Badge>{image.type}</Badge>
             {(image.type === "generate" || image.type === "text-to-image") && (
               <Badge variant="outline">{image.model}</Badge>

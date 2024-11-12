@@ -1,9 +1,9 @@
 import { Fal } from "@/_[provider]/fal/fal";
+import { Replicate } from "@/_[provider]/replicate/replicate";
 import { BlackForestLabs } from "@/components/black-forest-labs/black-forest-labs";
 import { Ideogram } from "@/components/ideogram/ideogram";
 import { OpenAi } from "@/components/openai/openai";
 import { Recraft } from "@/components/recraft/recraft";
-import { Replicate } from "@/components/replicate/replicate";
 import { redirect } from "next/navigation";
 
 export default function AiPage({ params }: { params: { provider: string } }) {
