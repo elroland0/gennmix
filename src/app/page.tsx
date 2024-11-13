@@ -25,7 +25,7 @@ export default function Home() {
           <p className="text-neutral-500 mb-8">
             Generate images using various AI services with your API keys
           </p>
-          <ShineBorder className="p-0 min-h-0" duration={20}>
+          <ShineBorder className="p-0 min-h-0" duration={20} borderRadius={4}>
             <ProviderTabs provider="" />
           </ShineBorder>
         </div>
