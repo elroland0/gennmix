@@ -36,9 +36,9 @@ export function Header() {
             <DialogHeader>
               <DialogTitle>Studio Beta</DialogTitle>
               <DialogDescription>
-                Studio is not available yet. We're working hard to bring you
-                powerful image generation and editing capabilities. Stay tuned
-                for the launch!
+                Studio is not available yet. We&apos;re working hard to bring
+                you powerful image generation and editing capabilities. Stay
+                tuned for the launch!
               </DialogDescription>
             </DialogHeader>
             <form
