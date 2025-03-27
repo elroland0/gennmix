@@ -49,7 +49,7 @@ export function FeedbackPopover() {
       <PopoverTrigger asChild>
         <Button variant="outline">
           <ChevronDownIcon className="w-4 h-4" />
-          Feature Request
+          Feedback
         </Button>
       </PopoverTrigger>
       <PopoverContent className="w-96">
