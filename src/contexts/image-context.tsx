@@ -79,13 +79,12 @@ export function ImageProvider({ children }: { children: React.ReactNode }) {
     const id = data.id ?? crypto.randomUUID();
     const newImage = { ...data, id } as Image;
     localStorage.setItem(`img-${id}`, JSON.stringify(newImage));
-    setImages([newImage, ...images]);
+    setImages((prev) => [newImage, ...prev]);
     return { id };
   };
 
   const removeImage = (id: string) => {
-    const newImages = images.filter((image) => image.id !== id);
-    setImages(newImages);
+    setImages((prev) => prev.filter((image) => image.id !== id));
     localStorage.removeItem(`img-${id}`);
   };
 

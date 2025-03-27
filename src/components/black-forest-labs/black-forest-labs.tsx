@@ -17,7 +17,7 @@ export function BlackForestLabs() {
       {!apiKeyExists && (
         <Notify className="mt-4">
           <p>
-            To use this feature, you need to get an API key from the{" "}
+            To use this feature, you need to get an API key from{" "}
             <Link
               href="https://docs.bfl.ml"
               target="_blank"

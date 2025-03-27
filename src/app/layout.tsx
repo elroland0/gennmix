@@ -31,7 +31,7 @@ export default function RootLayout({
             <ImageProvider>{children}</ImageProvider>
           </TooltipProvider>
           <Toaster />
-          <SonnerToaster />
+          <SonnerToaster expand />
         </CSPostHogProvider>
       </body>
     </html>
