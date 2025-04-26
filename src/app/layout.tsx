@@ -11,10 +11,11 @@ import { Toaster as SonnerToaster } from "@/components/ui/sonner";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "Gennmix",
-  description: "Generate images using various AI services with your API keys",
+  title: "RED Ad Media Image-Frontend",
+  description:
+    "Image-Frontend für Kunden & Mitarbeiter von RED Ad Media – Upload, Verwaltung und Teilen Ihrer Bildwelten im Corporate Design",
   icons: {
-    icon: "/favicon.svg",
+    icon: "/favicon-red.svg", // euer RED-Favicon
   },
 };
 
@@ -24,8 +25,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
-      <body className={cn(inter.className, "overflow-hidden")}>
+    <html lang="de">
+      <body className={cn(inter.className, "overflow-hidden bg-white")}>
         <CSPostHogProvider>
           <TooltipProvider>
             <ImageProvider>{children}</ImageProvider>
